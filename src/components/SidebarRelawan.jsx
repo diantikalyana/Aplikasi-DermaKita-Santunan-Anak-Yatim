@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
+
 const fontStyle = `
   @font-face {
-    font-family: 'Raleway';
+    font-family: 'Raleway'; 
     src: url('/fonts/Raleway-Regular.woff2') format('woff2');
     font-weight: 400;
-  }
+}
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-SemiBold.woff2') format('woff2');
     font-weight: 600;
   }
+
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-Bold.woff2') format('woff2');
@@ -23,7 +25,7 @@ const fontStyle = `
   }
 `;
 
-const Sidebar = () => {
+const SidebarRelawan = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -33,13 +35,13 @@ const Sidebar = () => {
   };
 
   const links = [
-    { name: "Dashboard", to: "/admin/dashboard" },
-    { name: "Data Anak Yatim", to: "/data-anak-yatim" },
-    { name: "Donasi", to: "/donasi" },
-    { name: "Laporan", to: "/laporan" },
-    { name: "Data Admin", to: "/dataadmin" },
-    { name: "Artikel", to: "/artikel" },
-    { name: "Dokumentasi", to: "/dokumentasi" },
+    { name: "Dashboard", to: "/relawan/dashboard" },
+    { name: "Dokumentasi", to: "/relawan/dokumentasirelawan" },
+    { name: "Data Anak Yatim", to: "/data-anak-yatimrelawan" },
+    { name: "Laporan", to: "/laporanrelawan" },
+    { name: "Data Relawan", to: "/datarelawan" },
+    { name: "Artikel", to: "/artikelrelawan" },
+    
   ];
 
  return (
@@ -49,7 +51,7 @@ const Sidebar = () => {
       {/* Atas: Logo & Navigasi */}
       <div>
         <div className="flex items-center justify-center mb-10 text-raleway font-bold text-2xl">
-          <img src={logo} alt="Logo" className="h-30 w-30" />
+          <img src={logo} alt="logo" className="h-30 w-30" />
         </div>
 
         {/* Navigasi */}
@@ -112,4 +114,4 @@ const Sidebar = () => {
 );
 };
 
-export default Sidebar;
+export default SidebarRelawan;
