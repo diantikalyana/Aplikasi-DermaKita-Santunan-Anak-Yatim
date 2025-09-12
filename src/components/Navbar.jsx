@@ -24,10 +24,10 @@ const fontStyle = `
 `;
 
 const dataList = [
-  { id: 1, title: "Donasi Anak Yatim", path: "/Donasi" },
-  { id: 2, title: "Laporan", path: "/Laporan" },
-  { id: 3, title: "Pengajuan Anak Yatim", path: "data-anak-yatim/Detailanak" },
-  { id: 4, title: "Profil Admin", path: "/profil" },
+  { id: 1, title: "Donasi Anak Yatim", path: "/admin/donasi" },
+  { id: 2, title: "Laporan", path: "/admin/laporan" },
+  { id: 3, title: "Pengajuan Anak Yatim", path: "/admin/data-anak-yatim/pengajuan" },
+  { id: 4, title: "Profil Admin", path: "/admin/profile" },
 ];
 
 const Navbar = () => {
@@ -59,12 +59,12 @@ const Navbar = () => {
     setNotifClicked(true);
     setTimeout(() => {
       setNotifClicked(false);
-      navigate("/notifikasi");
+      navigate("/admin/notifikasi");
     }, 300);
   };
 
   const handleProfileClick = () => {
-    navigate("/profileadmin");
+    navigate("/admin/profile");
   };
 
   return (

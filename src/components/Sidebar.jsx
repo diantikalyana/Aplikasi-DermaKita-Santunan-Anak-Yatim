@@ -34,22 +34,22 @@ const Sidebar = () => {
 
   const links = [
     { name: "Dashboard", to: "/admin/dashboard" },
-    { name: "Data Anak Yatim", to: "/data-anak-yatim" },
-    { name: "Donasi", to: "/donasi" },
-    { name: "Laporan", to: "/laporan" },
-    { name: "Data Admin", to: "/dataadmin" },
-    { name: "Artikel", to: "/artikel" },
-    { name: "Dokumentasi", to: "/dokumentasi" },
+    { name: "Data Anak Yatim", to: "/admin/data-anak-yatim" },
+    { name: "Donasi", to: "/admin/donasi" },
+    { name: "Laporan", to: "/admin/laporan" },
+    { name: "Data Admin", to: "/admin/dataadmin" },
+    { name: "Artikel", to: "/admin/artikel" },
+    { name: "Dokumentasi", to: "/admin/dokumentasi" },
   ];
 
  return (
   <>
     {/* Sidebar */}
-    <div className="w-60 min-h-screen bg-gradient-to-b from-[#493953] via-[#8c809c] to-[#cab6e4] text-white px-2 py-6 flex flex-col justify-between">
+    <div className="w-62 min-h-screen bg-gradient-to-b from-[#493953] via-[#8c809c] to-[#cab6e4] text-white px-2 py-6 flex flex-col justify-between">
       {/* Atas: Logo & Navigasi */}
       <div>
         <div className="flex items-center justify-center mb-10 text-raleway font-bold text-2xl">
-          <img src={logo} alt="Logo" className="h-30 w-30" />
+          <img src={logo} alt="Logo" className="h-20 w-auto" />
         </div>
 
         {/* Navigasi */}

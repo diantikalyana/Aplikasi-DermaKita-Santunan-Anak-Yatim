@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
-import { FiCheckCircle } from "react-icons/fi";
-import axios from "axios";
+import FotoEnam from "../../../images/FotoEnam.png";
+import FotoDua from "../../../images/FotoDua.png";
+import FotoTiga from "../../../images/FotoTiga.png";
 
 // Font injection
 const fontStyle = `
@@ -21,130 +22,106 @@ const DokumentasiKhusus = () => {
   const navigate = useNavigate();
   const [dataPenyaluran, setDataPenyaluran] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setErrorMsg("");
-      setUnauthorized(false);
-      setLoading(true);
+    // Dummy sesuai gambar
+    const dummyData = [
+      {
+        id: 1,
+        foto: FotoEnam,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Pada kesempatan yang penuh makna ini, DermaKita dengan penuh kepedulian menyalurkan bantuan sebesar Rp35.000.000 untuk mendukung perjuangan seorang anak yatim yang saat ini tengah berjuang melawan penyakit kanker otak.",
+      },
+      {
+        id: 2,
+        foto: FotoDua,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Bayu adalah seorang anak yatim yang saat ini sedang berjuang melawan sakit dan membutuhkan perawatan medis lanjutan. Kondisinya memerlukan penanganan intensif, sementara sang ibu mengalami keterbatasan dalam membiayai pengobatan.",
+      },
+      {
+        id: 3,
+        foto: FotoTiga,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Bayu adalah seorang anak yatim yang saat ini sedang berjuang melawan sakit dan membutuhkan perawatan medis lanjutan.",
+      },
+    ];
 
-      try {
-        let token = localStorage.getItem("token");
-        const role = localStorage.getItem("role");
-
-        if (!token) return navigate("/login");
-        if (role !== "admin") return setUnauthorized(true);
-
-        const { data, headers } = await axios.get(
-          "http://192.168.103.223:8000/api/dokumentasi",
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        // Simpan token baru jika ada di response header
-        const newToken = headers['authorization']?.replace('Bearer ', '');
-        if (newToken && newToken !== token) {
-          localStorage.setItem("token", newToken);
-          token = newToken;
-        }
-
-        setDataPenyaluran(data?.data || []);
-      } catch (err) {
-        const status = err.response?.status;
-        if (status === 401) navigate("/login");
-        else if (status === 403) setUnauthorized(true);
-        else setErrorMsg(err.response?.data?.message || "Gagal memuat data penyaluran.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
-
-  if (unauthorized) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5] font-raleway">
-        <div className="text-center p-6 bg-white shadow-md rounded">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Akses Ditolak</h2>
-          <p className="text-gray-700 mb-4">
-            Anda tidak memiliki izin untuk melihat halaman ini.
-          </p>
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-[#493953] hover:bg-[#836f8f] text-white px-4 py-2 rounded shadow"
-          >
-            ← Kembali
-          </button>
-        </div>
-      </div>
-    );
-  }
+    setTimeout(() => {
+      setDataPenyaluran(dummyData);
+      setLoading(false);
+    }, 800);
+  }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#f5f5f5] text-[#111827] font-raleway">
+    <div className="flex min-h-screen bg-white text-[#111827] font-raleway">
       <style>{fontStyle}</style>
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="p-6 max-w-6xl mx-auto w-full">
-          <h1 className="text-2xl font-bold text-[#493953] mb-6">
-            Dokumentasi Penyaluran Khusus
+        <main className="p-6 max-w-7xl mx-auto w-full">
+          <h1 className="text-2xl font-bold text-[#111827] mb-6">
+            Dokumentasi Khusus
           </h1>
 
-          {loading && <p>Loading data...</p>}
-          {errorMsg && (
-            <p className="text-red-500 bg-red-100 p-2 rounded">{errorMsg}</p>
-          )}
+          {loading && <p className="text-gray-500">Loading data...</p>}
 
-          {!loading && !errorMsg && (
+          {!loading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {dataPenyaluran.length > 0 ? (
-                dataPenyaluran.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => navigate(`/detaildokumentasi/${item.id}`)}
-                    className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer"
-                  >
-                    <img
-                      src={item.foto_url}
-                      alt={`Dokumentasi ${item.nama_anak}`}
-                      className="w-full h-40 object-cover rounded-md mb-4"
-                    />
-                    <p className="text-sm text-gray-600 mb-1">Tanggal: {item.tanggal}</p>
-                    <h2 className="text-lg font-semibold text-[#493953] mb-1">
-                      {item.nama_anak} - {item.desa}
-                    </h2>
-                    <p className="text-sm text-gray-600 mb-1">
-                      Penyalur: {Array.isArray(item.penyalur) ? item.penyalur.join(", ") : item.penyalur}
-                    </p>
-                    <p className="text-sm text-gray-600 mb-1">
-                      Target Donasi: Rp {item.target.toLocaleString("id-ID")}
-                    </p>
-                    <div className="mb-2 flex flex-wrap gap-2">
-                      <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-semibold">
-                        <FiCheckCircle className="text-green-600" />
-                        Tersalurkan: Rp {item.nominal.toLocaleString("id-ID")}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 mt-2">{item.keterangan}</p>
-                  </div>
-                ))
-              ) : (
-                <p>Tidak ada data penyaluran khusus.</p>
-              )}
+              {dataPenyaluran.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-[#B091D1]/29 rounded-2xl shadow-md p-4 hover:shadow-lg transition cursor-pointer"
+                  onClick={() =>
+                    navigate(`/admin/dokumentasi/khusus/${item.id}`, {
+                      state: { item },
+                    })
+                  }
+                >
+                  {/* Foto */}
+                  <img
+                    src={item.foto}
+                    alt={item.nama_anak}
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+
+                  {/* Tanggal */}
+                  <p className="text-xs text-gray-600 mb-1">
+                    Tanggal: {item.tanggal}
+                  </p>
+
+                  {/* Judul */}
+                  <h2 className="text-lg font-bold text-[#111827] mb-2">
+                    {item.nama_anak} - {item.desa}
+                  </h2>
+
+                  {/* Badge Tersalurkan */}
+                  <span className="inline-block bg-[#25E02E]/37 text-black text-sm font-medium px-3 py-1 rounded-full mb-3">
+                    Tersalurkan: Rp{item.nominal.toLocaleString("id-ID")}
+                  </span>
+
+                  {/* Deskripsi */}
+                  <p className="text-sm text-gray-700 line-clamp-3">
+                    {item.deskripsi}
+                  </p>
+                </div>
+              ))}
             </div>
           )}
-
-          <div className="mt-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="bg-[#493953] hover:bg-[#836f8f] text-white px-4 py-2 rounded shadow"
-            >
-              ← Kembali
-            </button>
-          </div>
         </main>
       </div>
     </div>

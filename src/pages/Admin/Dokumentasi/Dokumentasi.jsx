@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
-import axios from "axios";
+// import axios from "axios"; // sementara dimatikan
 
 const fontStyle = `
   @font-face {
@@ -31,13 +31,22 @@ const Dokumentasi = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Ambil data dokumentasi dari API
+  // Dummy data
+  const dummyDokumentasi = [
+    { id: 1, judul: "Penyaluran Beasiswa A", tanggal: "2025-08-15" },
+    { id: 2, judul: "Bantuan Dana Medis B", tanggal: "2025-08-20" },
+    { id: 3, judul: "Santunan Anak Yatim C", tanggal: "2025-08-25" },
+  ];
+
+  // useEffect dummy
   useEffect(() => {
     const fetchDokumentasi = async () => {
       try {
         setLoading(true);
         setError(null);
 
+        // axios versi asli (sementara di-comment)
+        /*
         const token = localStorage.getItem("token");
         if (!token) {
           setError("Token tidak ditemukan, silakan login ulang.");
@@ -46,9 +55,7 @@ const Dokumentasi = () => {
         }
 
         const res = await axios.get("http://192.168.102.100:8000/api/dokumentasi", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.data && res.data.data) {
@@ -56,10 +63,17 @@ const Dokumentasi = () => {
         } else {
           setDokumenList([]);
         }
+        */
+
+        // dummy jalan dulu
+        setTimeout(() => {
+          setDokumenList(dummyDokumentasi);
+          setLoading(false);
+        }, 500);
+
       } catch (err) {
         console.error("Gagal mengambil dokumentasi:", err);
         setError("Gagal mengambil data dokumentasi.");
-      } finally {
         setLoading(false);
       }
     };
@@ -105,7 +119,7 @@ const Dokumentasi = () => {
 
           <div className="flex flex-col md:flex-row gap-8 mt-6">
             <button
-              onClick={() => handleNavigate("/dokumentasi/dokumentasiumumadmin")}
+              onClick={() => handleNavigate("/admin/dokumentasi/umum")}
               className="relative w-72 h-32 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-700 text-white rounded-2xl text-2xl font-semibold shadow-lg hover:scale-105 transition-transform duration-300 group"
             >
               <span className="relative z-10">Dokumentasi Donasi Umum</span>
@@ -113,7 +127,7 @@ const Dokumentasi = () => {
             </button>
 
             <button
-              onClick={() => handleNavigate("/dokumentasi/dokumentasikhususadmin")}
+              onClick={() => handleNavigate("/admin/dokumentasi/khusus")}
               className="relative w-72 h-32 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-700 text-white rounded-2xl text-2xl font-semibold shadow-lg hover:scale-105 transition-transform duration-300 group"
             >
               <span className="relative z-10">Dokumentasi Khusus</span>

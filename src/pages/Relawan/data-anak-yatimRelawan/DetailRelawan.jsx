@@ -2,162 +2,147 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/NavbarRelawan";
 import Sidebar from "../../../components/SidebarRelawan";
-import axios from "axios";
 
 const fontStyle = `
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-Regular.woff2') format('woff2');
     font-weight: 400;
-    font-display: swap;
   }
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-SemiBold.woff2') format('woff2');
     font-weight: 600;
-    font-display: swap;
   }
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-Bold.woff2') format('woff2');
     font-weight: 700;
-    font-display: swap;
   }
   .font-raleway {
     font-family: 'Raleway', sans-serif;
   }
 `;
 
+const StatusBadge = ({ status }) => {
+  const statusColors = {
+    Aktif: "bg-[#52DE3D]",
+    "Tidak Aktif": "bg-[#F23F27]",
+  };
+
+  const colorClass = statusColors[status] || "bg-gray-500";
+  return (
+  <span
+  className={`flex items-center justify-center text-black text-xs font-medium px-3 py-1 rounded-md ${colorClass}`}
+>
+  {status}
+</span>
+
+  );
+};
+
 const Detail = () => {
   const navigate = useNavigate();
   const [dataAnakYatim, setDataAnakYatim] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const handleClick = (id) => {
-    navigate(`/data-anak-yatim/Detailanak/${id}`);
-  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://192.168.100.129:8000/api/anak");
+    const dummyData = [
+      {
+        id_anak: 1,
+        nama_lengkap: "Ahmad Fauzi",
+        tempat_tanggallahir: "Jakarta, 12 Mei 2010",
+        alamat: "Jl. Merdeka No. 10, Jakarta",
+        nama_wali: "Bapak Fulan",
+        status: "Aktif",
+      },
+      {
+        id_anak: 2,
+        nama_lengkap: "Siti Aminah",
+        tempat_tanggallahir: "Bandung, 3 Maret 2011",
+        alamat: "Jl. Braga No. 5, Bandung",
+        nama_wali: "Ibu Fulanah",
+        status: "Tidak Aktif",
+      },
+      {
+        id_anak: 3,
+        nama_lengkap: "Budi Santoso",
+        tempat_tanggallahir: "Surabaya, 21 Januari 2012",
+        alamat: "Jl. Kenjeran No. 7, Surabaya",
+        nama_wali: "Pak Ahmad",
+        status: "Tidak Aktif",
+      },
+    ];
 
-        let data = [];
-        if (Array.isArray(res.data)) {
-          data = res.data;
-        } else if (Array.isArray(res.data.data)) {
-          data = res.data.data;
-        }
-
-        if (!data.length) {
-          data = [
-            {
-              id: 1,
-              nama_lengkap: "Arello Mahesa Kynan",
-              tempat_TanggalLahir: "Kajoran, 14 Februari 2011",
-              alamat: "Kajoran, Kajoran, Magelang",
-              wali: "Fulanah",
-              status: "Aktif",
-            },
-            {
-              id: 2,
-              nama_lengkap: "Elara Vionella Marisse",
-              tempat_TanggalLahir: "Sidowangi, 25 Juni 2007",
-              alamat: "Sidowangi, Kajoran, Magelang",
-              wali: "Fulanah",
-              status: "Tidak Aktif",
-            },
-          ];
-        }
-
-        setDataAnakYatim(data);
-      } catch (err) {
-        setError("Gagal mengambil data: " + err.message);
-        setDataAnakYatim([
-          {
-            id: 1,
-            nama_lengkap: "Arello Mahesa Kynan",
-            tempat_TanggalLahir: "Kajoran, 14 Februari 2011",
-            alamat: "Kajoran, Kajoran, Magelang",
-            wali: "Fulanah",
-            status: "Aktif",
-          },
-          {
-            id: 2,
-            nama_lengkap: "Elara Vionella Marisse",
-            tempat_TanggalLahir: "Sidowangi, 25 Juni 2007",
-            alamat: "Sidowangi, Kajoran, Magelang",
-            wali: "Fulanah",
-            status: "Tidak Aktif",
-          },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    setTimeout(() => {
+      setDataAnakYatim(dummyData);
+      setLoading(false);
+    }, 1000);
   }, []);
 
+  const handleClick = (id) => {
+    navigate(`/relawan/data-anak-yatim/detailanak/${id}`);
+  };
+
   return (
-    <div className="flex min-h-screen font-raleway">
+    <div className="flex min-h-screen font-raleway bg-white text-gray-800">
       <style>{fontStyle}</style>
-
       <Sidebar />
-
-      <div className="flex-1 flex flex-col bg-gray-50">
+      <div className="flex flex-col flex-1">
         <Navbar />
-
-        <main className="p-6">
-          <div className="bg-[#493953] text-white p-4 w-[250px] rounded-lg shadow relative mb-6">
-            <h2 className="text-base font-semibold">Data Anak Yatim</h2>
-          </div>
-
-          {loading ? (
-            <p className="text-blue-500">Memuat data...</p>
-          ) : error && !dataAnakYatim.length ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <div className="overflow-hidden shadow rounded-lg bg-white border border-gray-200">
-              <table className="w-full text-sm">
-                <thead className="bg-white text-gray-700 border-b border-gray-300">
-                  <tr>
-                    <th className="py-3 px-4 text-left font-semibold">No.</th>
-                    <th className="py-3 px-4 text-left font-semibold">Nama Lengkap</th>
-                    <th className="py-3 px-4 text-left font-semibold">Tempat, Tanggal Lahir</th>
-                    <th className="py-3 px-4 text-left font-semibold">Alamat</th>
-                    <th className="py-3 px-4 text-left font-semibold">Wali</th>
-                    <th className="py-3 px-4 text-left font-semibold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataAnakYatim.map((anak, index) => (
-                    <tr
-                      key={anak.id || index}
-                      onClick={() => handleClick(anak.id)}
-                      className="hover:bg-gray-100 cursor-pointer border-b border-gray-200"
-                    >
-                      <td className="py-2 px-4">{index + 1}</td>
-                      <td className="py-2 px-4">{anak.nama_lengkap}</td>
-                      <td className="py-2 px-4">{anak.tempat_TanggalLahir}</td>
-                      <td className="py-2 px-4">{anak.alamat}</td>
-                      <td className="py-2 px-4">{anak.wali}</td>
-                      <td className="py-2 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-white text-xs ${
-                            anak.status === "Aktif" ? "bg-green-500" : "bg-red-500"
-                          }`}
-                        >
-                          {anak.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <main className="p-4 overflow-auto">
+          <div className="bg-[#f0f0f0] rounded-xl shadow-md overflow-hidden">
+            {/* Header judul */}
+            <div className="bg-[#f0f0f0] p-3 flex items-center">
+              <button
+                onClick={() => navigate("/admin/data-anak-yatim/pengajuan")}
+                className="flex flex-col items-start text-left bg-[#493953] hover:bg-[#836f8f] px-6 py-3 rounded-lg shadow transition relative text-white w-70"
+              >
+                {/* Judul */}
+                <span className="text-lg font-normal">Data Anak Yatim</span>
+                {/* Subjudul italic */}
+              </button>
             </div>
-          )}
+
+            {loading ? (
+              <p className="p-4">Memuat data...</p>
+            ) : dataAnakYatim.length === 0 ? (
+              <p className="p-4 text-gray-500">Data tidak tersedia.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-left text-gray-700">
+                  <thead className="bg-[#f0f0f0] border-b w-70 border-[#c1b9ca]">
+                    <tr>
+                      <th className="px-4 py-2">No</th>
+                      <th className="px-4 py-2">Nama Lengkap</th>
+                      <th className="px-4 py-2">Tempat, Tanggal Lahir</th>
+                      <th className="px-4 py-2">Alamat</th>
+                      <th className="px-4 py-2">Wali</th>
+                      <th className="px-4 py-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataAnakYatim.map((anak, index) => (
+                      <tr
+                        key={anak.id_anak}
+                        className="hover:bg-gray-200 cursor-pointer"
+                        onClick={() => handleClick(anak.id_anak)}
+                      >
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{anak.nama_lengkap}</td>
+                        <td className="px-4 py-2">{anak.tempat_tanggallahir}</td>
+                        <td className="px-4 py-2">{anak.alamat}</td>
+                        <td className="px-4 py-2">{anak.nama_wali}</td>
+                        <td className="px-4 py-2">
+                          <StatusBadge status={anak.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </main>
       </div>
     </div>

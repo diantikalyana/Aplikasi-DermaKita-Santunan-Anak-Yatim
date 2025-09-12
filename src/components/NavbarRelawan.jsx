@@ -24,11 +24,11 @@ const fontStyle = `
 `;
 
 const dataList = [
-  { id: 1, title: "Laporan Tasaruf", path: "/laporan/tambah-penyaluran" },
-  { id: 2, title: "Laporan", path: "/Laporan" },
-  { id: 3, title: "Dokumentasi Tasaruf", path: "dokumentasi" },
-  { id: 4, title: "Profil Admin", path: "/profil" },
-  { id: 5, title: "Dokumentasi Khusus", path: "/dokumentasi/dokumentasiumum"}
+  { id: 1, title: "Laporan Tasaruf", path: "/relawan/laporan/1" },
+  { id: 2, title: "Laporan", path: "/relawan/laporan" },
+  { id: 3, title: "Dokumentasi Tasaruf", path: "/relawan/dokumentasi" },
+  { id: 4, title: "Profil Relawan", path: "/relawan/profilerelawan/profilerelawan" },
+  { id: 5, title: "Dokumentasi Khusus", path: "/relawan/dokumentasi/khusus"}
 ];
 
 const NavbarRelawan = () => {
@@ -60,12 +60,12 @@ const NavbarRelawan = () => {
     setNotifClicked(true);
     setTimeout(() => {
       setNotifClicked(false);
-      navigate("/notifikasi");
+      navigate("/relawan/notifikasi");
     }, 300);
   };
 
   const handleProfileClick = () => {
-    navigate("/profileadmin");
+    navigate("/relawan/profilerelawan/profilerelawan");
   };
 
   return (

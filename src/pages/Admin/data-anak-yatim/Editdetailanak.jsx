@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios"; // sementara di-disable
 
 const Editdetailanak = () => {
   const { id } = useParams();
@@ -9,20 +9,25 @@ const Editdetailanak = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnakById = async () => {
-      try {
-        const response = await axios.get(`/api/anak/${id}`);
-        setFormData(response.data);
-      } catch (error) {
-        console.error("Gagal mengambil data anak:", error);
-        alert("Gagal mengambil data anak. Pastikan ID valid.");
-        navigate("/data-anak-yatim");
-      } finally {
-        setLoading(false);
-      }
+    // Dummy data sementara
+    const dummyData = {
+      id,
+      nama: "Budi",
+      namaWali: "Pak Ahmad",
+      namaPendamping: "Bu Siti",
+      telp: "08123456789",
+      rekening: "1234567890",
+      tempatTanggalLahir: "Jakarta, 1 Januari 2010",
+      alamat: "Jl. Merpati No. 5",
+      jenisKelamin: "Laki-laki",
+      keterangan: "Anak rajin belajar"
     };
-    fetchAnakById();
-  }, [id, navigate]);
+
+    setTimeout(() => {
+      setFormData(dummyData);
+      setLoading(false);
+    }, 500); // biar ada delay kayak fetch beneran
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,8 +37,10 @@ const Editdetailanak = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/anak/${id}`, formData);
-      alert("Perubahan data anak berhasil disimpan!");
+      // sementara ga ada request
+      // await axios.put(`/api/anak/${id}`, formData);
+      console.log("Data disimpan (dummy):", formData);
+      alert("Perubahan data anak berhasil disimpan! (dummy mode)");
       navigate(`/data-anak-yatim/detailanak/${id}`);
     } catch (error) {
       console.error("Gagal menyimpan perubahan:", error);
@@ -47,7 +54,7 @@ const Editdetailanak = () => {
   return (
     <div className="max-w-xl mx-auto p-6 bg-gray-100 rounded shadow-md mt-6">
       <h2 className="text-2xl font-bold text-[#493953] mb-4 text-center">
-        Edit Data Anak
+        Edit Data Anak (Dummy Mode)
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

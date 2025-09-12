@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/NavbarRelawan";
 import Sidebar from "../../../components/SidebarRelawan";
-import { Bell } from "lucide-react";
 
+// Import icon gambar manual
+import successIcon from "../../../images/success-icon.png";
+import warningIcon from "../../../images/warning-icon.png";
+
+// ✅ Inject font Raleway langsung
 const fontStyle = `
   @font-face {
     font-family: 'Raleway';
@@ -27,70 +31,58 @@ const fontStyle = `
 const dummyNotifikasi = [
   {
     id: 1,
-    judul: "Permintaan Donasi Baru",
-    pesan: "User Andi mengajukan bantuan untuk anak yatim.",
-    pengirim: "Andi",
-    peran: "User",
-    tanggal: "2025-08-03T12:20:00",
+    type: "warning",
+    pesan: "Pengajuan baru data anak yatim dari Fulan",
   },
   {
     id: 2,
-    judul: "Laporan Kegiatan",
-    pesan: "Relawan Budi telah mengunggah laporan kunjungan.",
-    pengirim: "Budi",
-    peran: "Relawan",
-    tanggal: "2025-08-03T08:45:00",
-  },
-  {
-    id: 3,
-    judul: "Update Data Anak Yatim",
-    pesan: "User Sari memperbarui data profil anak yatim.",
-    pengirim: "Sari",
-    peran: "User",
-    tanggal: "2025-08-02T16:00:00",
+    type: "success",
+    pesan: "Donasi Rp200.000 dari Donatur B diterima",
   },
 ];
 
-const Notifikasi = () => {
+const NotifikasiRelawan = () => {
   const [notifList, setNotifList] = useState([]);
 
   useEffect(() => {
-    // Simulasi loading data
     const timer = setTimeout(() => {
       setNotifList(dummyNotifikasi);
-    }, 1000);
-
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="flex min-h-screen font-raleway bg-gray-100">
+      {/* ✅ Inject font */}
+      <style>{fontStyle}</style>
+
       <Sidebar />
       <div className="flex-1">
         <Navbar />
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <Bell className="text-purple-700" />
-            Notifikasi Masuk
-          </h1>
-
           {notifList.length === 0 ? (
             <p className="text-gray-500 italic">Memuat notifikasi...</p>
           ) : (
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               {notifList.map((notif) => (
                 <li
                   key={notif.id}
-                  className="bg-white rounded-xl shadow p-4 border-l-4 border-purple-500"
+                  className="bg-white rounded-md shadow-sm p-3 flex items-start gap-3"
                 >
-                  <p className="text-sm text-gray-500">
-                    {new Date(notif.tanggal).toLocaleString()}
-                  </p>
-                  <p className="font-semibold text-gray-800">{notif.judul}</p>
-                  <p className="text-gray-700 text-sm mt-1">{notif.pesan}</p>
-                  <p className="text-xs text-gray-400 mt-2 italic">
-                    Dari: {notif.pengirim} ({notif.peran})
-                  </p>
+                  {/* Icon sesuai type (pakai gambar) */}
+                  <img
+                    src={notif.type === "success" ? successIcon : warningIcon}
+                    alt={notif.type}
+                    className="w-8 h-8 mt-1"
+                  />
+
+                  {/* Isi notifikasi */}
+                  <div className="flex-1">
+                    <p className="text-gray-800 text-sm">{notif.pesan}</p>
+                    <button className="text-sm text-gray-400 italic hover:underline">
+                      Lihat detail
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -101,4 +93,4 @@ const Notifikasi = () => {
   );
 };
 
-export default Notifikasi;
+export default NotifikasiRelawan;

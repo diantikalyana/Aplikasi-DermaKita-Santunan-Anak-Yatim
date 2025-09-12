@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { FaUsers, FaMoneyBillWave } from 'react-icons/fa';
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
@@ -25,42 +24,67 @@ const fontStyle = `
   }
 `;
 
-const DonasiAdmin = () => {
+const Donasi = () => {
   const [donasiData, setDonasiData] = useState([]);
   const [tanggal, setTanggal] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // ambil token dari localStorage
-        const token = localStorage.getItem("token");
+    // === sementara pakai dummy data ===
+    const dummyData = [
+      {
+        id: 1,
+        tanggal: "01 Agustus 2025",
+        donatur: "Budi",
+        nominal: 250000,
+        metode: "Transfer Bank",
+        jenis_donasi: "Pendidikan",
+        status: "Sukses",
+      },
+      {
+        id: 2,
+        tanggal: "05 Agustus 2025",
+        donatur: "Siti",
+        nominal: 100000,
+        metode: "E-Wallet",
+        jenis_donasi: "Kesehatan",
+        status: "Pending",
+      },
+      {
+        id: 3,
+        tanggal: "15 Agustus 2025",
+        donatur: "Andi",
+        nominal: 500000,
+        metode: "Transfer Bank",
+        jenis_donasi: "Bencana Alam",
+        status: "Sukses",
+      },
+    ];
 
-        if (!token) {
-          console.error("Token tidak ditemukan, silakan login dulu.");
-          return;
-        }
+    setDonasiData(dummyData);
 
-        const response = await axios.get("http://192.168.102.100:8000/api/donasi", {
-          timeout: 20000,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setDonasiData(response.data);
-      } catch (error) {
-        console.error("Gagal mengambil data donasi:", error);
-        setDonasiData([]);
-      }
-    };
-
-    fetchData();
-
+    // set tanggal hari ini
     const now = new Date();
     const formatted = now.toLocaleDateString('id-ID', {
       day: '2-digit', month: 'long', year: 'numeric',
     });
     setTanggal(formatted);
+
+    /*
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get("http://192.168.102.100:8000/api/donasi", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDonasiData(response.data);
+      } catch (error) {
+        console.error("Gagal mengambil data donasi:", error);
+      }
+    };
+    fetchData();
+    */
   }, []);
 
   const totalDonasi = donasiData.reduce((acc, curr) => acc + (curr.nominal || 0), 0);
@@ -130,4 +154,4 @@ const DonasiAdmin = () => {
   );
 };
 
-export default DonasiAdmin;
+export default Donasi;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
 
 const fontStyle = `
   @font-face {
@@ -30,8 +29,36 @@ const DataAdmin = () => {
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [formData, setFormData] = useState({ username: "", password: "" });
 
-  // Ambil data admin dari API
+  // sementara pakai dummy data
   useEffect(() => {
+    const dummyAdmins = [
+      {
+        id: 1,
+        username: "admin1",
+        password: "12345",
+        status: "Aktif",
+        lastLogin: "01-09-2025 08:30",
+      },
+      {
+        id: 2,
+        username: "admin2",
+        password: "qwerty",
+        status: "Nonaktif",
+        lastLogin: "28-08-2025 10:15",
+      },
+      {
+        id: 3,
+        username: "superadmin",
+        password: "super123",
+        status: "Aktif",
+        lastLogin: "31-08-2025 14:45",
+      },
+    ];
+
+    setAdmins(dummyAdmins);
+
+    // === kalau nanti BE sudah siap, tinggal aktifkan axios ini lagi ===
+    /*
     const fetchAdmins = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -40,13 +67,13 @@ const DataAdmin = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAdmins(response.data.data || []); // pastikan sesuai struktur API
+        setAdmins(response.data.data || []);
       } catch (error) {
         console.error("Gagal mengambil data admin:", error);
       }
     };
-
     fetchAdmins();
+    */
   }, []);
 
   const handleEditClick = (admin) => {
@@ -59,6 +86,19 @@ const DataAdmin = () => {
   };
 
   const handleSaveChanges = async () => {
+    // sementara langsung update state aja (dummy mode)
+    setAdmins((prev) =>
+      prev.map((admin) =>
+        admin.id === selectedAdmin.id
+          ? { ...admin, username: formData.username, password: formData.password }
+          : admin
+      )
+    );
+
+    handleCloseModal();
+
+    // kalau nanti BE sudah siap, balik lagi ke axios PUT ini
+    /*
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -73,8 +113,6 @@ const DataAdmin = () => {
           },
         }
       );
-
-      // Update state setelah berhasil edit
       setAdmins((prev) =>
         prev.map((admin) =>
           admin.id === selectedAdmin.id
@@ -82,11 +120,11 @@ const DataAdmin = () => {
             : admin
         )
       );
-
       handleCloseModal();
     } catch (error) {
       console.error("Gagal update data admin:", error);
     }
+    */
   };
 
   return (

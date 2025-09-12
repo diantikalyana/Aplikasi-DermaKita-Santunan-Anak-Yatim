@@ -1,94 +1,129 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
+import FotoEnam from "../../../images/FotoEnam.png";
+import FotoDua from "../../../images/FotoDua.png";
+import FotoTiga from "../../../images/FotoTiga.png";
 
-const dokumentasiData = [
-  {
-    id: 1,
-    tanggal: "2025-08-01",
-    lokasi: "Desa Sugihan",
-    nominal: "Rp 10.000.000",
-    metode: "Bank Syariah Indonesia",
-    rekening: 3,
-    keterangan:
-      "Dana sebesar 10 juta telah ditasarufkan melalui Bank Syariah Indonesia ke 3 rekening anak yatim di Desa Sugihan.",
-    foto: "/images/dokumentasi1.jpg",
-  },
-  {
-    id: 2,
-    tanggal: "2025-08-03",
-    lokasi: "Desa Sidowangi",
-    nominal: "Rp 7.500.000",
-    metode: "Bank Syariah Indonesia",
-    rekening: 2,
-    keterangan:
-      "Donasi senilai 7,5 juta ditransfer ke 2 rekening penerima di Desa Sidowangi untuk kebutuhan pendidikan.",
-    foto: "/images/dokumentasi2.jpg",
-  },
-  {
-    id: 3,
-    tanggal: "2025-08-04",
-    lokasi: "Desa Sangen",
-    nominal: "Rp 5.000.000",
-    metode: "Bank Syariah Indonesia",
-    rekening: 1,
-    keterangan:
-      "Penyaluran dana sebesar 5 juta telah dilakukan ke 1 rekening anak yatim di Desa Sangen melalui transfer bank.",
-    foto: "/images/dokumentasi3.jpg",
-  },
-];
+// Font injection
+const fontStyle = `
+  @font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway-Regular.woff2') format('woff2');
+    font-weight: 400;
+  }
+  .font-raleway {
+    font-family: 'Raleway', sans-serif;
+  }
+`;
 
 const DokumentasiUmum = () => {
   const navigate = useNavigate();
+  const [dataPenyaluran, setDataPenyaluran] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Dummy sesuai gambar
+    const dummyData = [
+      {
+        id: 1,
+        foto: FotoEnam,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Pada kesempatan yang penuh makna ini, DermaKita dengan penuh kepedulian menyalurkan bantuan sebesar Rp35.000.000 untuk mendukung perjuangan seorang anak yatim yang saat ini tengah berjuang melawan penyakit kanker otak.",
+      },
+      {
+        id: 2,
+        foto: FotoDua,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Bayu adalah seorang anak yatim yang saat ini sedang berjuang melawan sakit dan membutuhkan perawatan medis lanjutan.",
+      },
+      {
+        id: 3,
+        foto: FotoTiga,
+        tanggal: "2025-06-30",
+        nama_anak: "Bayu Pratama",
+        desa: "Desa Sugihan",
+        nominal: 35000000,
+        target: 35000000,
+        deskripsi:
+          "Bayu adalah seorang anak yatim yang saat ini sedang berjuang melawan sakit dan membutuhkan perawatan medis lanjutan.",
+      },
+    ];
+
+    setTimeout(() => {
+      setDataPenyaluran(dummyData);
+      setLoading(false);
+    }, 800);
+  }, []);
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-white text-[#111827] font-raleway">
+      <style>{fontStyle}</style>
       <Sidebar />
-      <div className="flex-1 bg-[#f5f5f5] min-h-screen">
+      <div className="flex flex-col flex-1">
         <Navbar />
-        <div className="p-6">
-          <h1 className="text-3xl font-semibold text-gray-800 mb-6">
+        <main className="p-6 max-w-7xl mx-auto w-full">
+          <h1 className="text-2xl font-bold text-[#111827] mb-6">
             Dokumentasi Umum
           </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {dokumentasiData.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white p-5 rounded-xl shadow hover:shadow-md transition-all duration-300"
-              >
-                <img
-                  src={item.foto}
-                  alt={`Dokumentasi ${item.lokasi}`}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                />
-                <p className="text-sm text-gray-500 mb-1">{item.tanggal}</p>
-                <h2 className="text-lg font-bold text-gray-700 mb-1">
-                  {item.lokasi}
-                </h2>
-                <p className="text-sm text-gray-600 mb-1">
-                  <strong>Nominal:</strong> {item.nominal}
-                </p>
-                <p className="text-sm text-gray-600 mb-1">
-                  <strong>Metode:</strong> {item.metode}
-                </p>
-                <p className="text-sm text-gray-600 mb-1">
-                  <strong>Jumlah Rekening:</strong> {item.rekening}
-                </p>
-                <p className="text-gray-700 mt-2">{item.keterangan}</p>
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="bg-[#493953] hover:bg-[#836f8f] text-white px-4 py-2 rounded shadow"
-            >
-              ← Kembali
-            </button>
-          </div>
-        </div>
+          {loading && <p className="text-gray-500">Loading data...</p>}
+
+          {!loading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {dataPenyaluran.map((item) => {
+                const persentase = Math.min(
+                  Math.round((item.nominal / item.target) * 100),
+                  100
+                );
+
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-[#B091D1]/29 rounded-2xl shadow-md p-4 hover:shadow-lg transition cursor-pointer"
+                    onClick={() => navigate(`/admin/dokumentasi/umum/${item.id}`)}
+                  >
+                    {/* Foto */}
+                    <img
+                      src={item.foto}
+                      alt={item.nama_anak}
+                      className="w-full h-48 object-cover rounded-lg mb-3"
+                    />
+
+                    {/* Tanggal */}
+                    <p className="text-xs text-gray-600 mb-1">
+                      Tanggal: {item.tanggal}
+                    </p>
+
+                    {/* Judul */}
+                    <h2 className="text-lg font-bold text-[#111827] mb-2">
+                      {item.nama_anak} - {item.desa}
+                    </h2>
+
+                    {/* Badge Tersalurkan */}
+                    <span className="inline-block bg-[#25E02E]/37 text-black text-sm font-medium px-3 py-1 rounded-full mb-3">
+                      Tersalurkan: Rp{item.nominal.toLocaleString("id-ID")}
+                    </span>
+
+                    {/* Deskripsi */}
+                    <p className="text-sm text-gray-700">{item.deskripsi}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );

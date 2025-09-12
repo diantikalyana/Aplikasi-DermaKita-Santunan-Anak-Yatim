@@ -4,141 +4,184 @@ import Navbar from "../../../components/NavbarRelawan";
 import Sidebar from "../../../components/SidebarRelawan";
 import Artikel1 from "../../../assets/Artikel1.png";
 import Artikel2 from "../../../assets/Artikel2.png";
-
-
+import arrowIcon from "../../../assets/Arrow.png";
 
 const dummyArtikelList = [
   {
     id: 1,
-    title: "Bantu Alif Melawan Kanker",
-    date: "01 Agustus 2025",
-    image: Artikel1,
-    content: `Alif, 7 tahun, anak yatim yang menderita kanker darah. Ia sangat membutuhkan bantuan dana untuk menjalani pengobatan intensif di rumah sakit dengan total kebutuhan Rp50.000.000.
+    judul:
+      "Kegiatan Santunan Anak Yatim di Kajoran: Merajut Harapan, Menebar Kebaikan",
+    deskripsi1: `Kajoran, 12 Juli 2025 — Dalam suasana penuh haru dan kebahagiaan, kegiatan santunan anak yatim digelar di Masjid wilayah Kajoran sebagai bagian dari program "Berbagi di Masjid". Acara ini diinisiasi oleh saudara Beni bersama tim DermaSAPA, relawan lokal, tokoh masyarakat, dan para donatur.`,
+    deskripsi2: `Santunan berupa alat tulis dan kebutuhan pokok senilai Rp5.000.000,- disalurkan kepada anak-anak yatim sebagai bentuk kepedulian sosial dan solidaritas masyarakat terhadap mereka yang membutuhkan.
 
-Kegiatan penggalangan dana ini menjadi bentuk nyata kepedulian kita terhadap masa depan anak-anak yang tengah berjuang menghadapi penyakit berat. 
-
-Dengan bantuanmu, Alif memiliki harapan untuk sembuh dan kembali menjalani masa kecilnya seperti anak-anak lainnya. Mari menjadi bagian dari harapan dan kesembuhan Alif.`,
-    terkumpul: 30000000,
-    target: 50000000,
+Kegiatan santunan dimulai pukul 09.00 WIB dan diawali dengan pembacaan doa bersama. Anak-anak yatim dari berbagai dusun di wilayah Kajoran hadir dengan wajah ceria. Mereka disambut hangat oleh panitia dan relawan.`,
+    rangkaian: [
+      "Pembacaan tilawah Al-Qur’an",
+      "Sambutan dari perwakilan panitia dan tokoh masyarakat",
+      "Motivasi singkat untuk anak-anak",
+      "Penyerahan santunan dan bingkisan",
+      "Makan siang bersama dan sesi foto",
+    ],
+    foto: Artikel1,
+    updated_at: "2025-07-12T10:00:00Z",
   },
   {
     id: 2,
-    title: "Bantu Hanum yang Terbaring Lemah",
-    date: "03 Agustus 2025",
-    image: Artikel2,
-    content: `Hanum adalah anak yatim berusia 9 tahun yang sedang sakit keras dan membutuhkan uluran tangan kita semua untuk biaya pengobatan sebesar Rp20.000.000.
-
-Setiap rupiah dari kebaikanmu akan menjadi napas baru baginya, menjadi bukti bahwa ia tidak berjuang sendirian. 
-
-Mari bersama-sama menyalakan kembali semangat hidup dalam tubuh kecilnya yang kini terbaring lemah.`,
-    terkumpul: 18000000,
-    target: 20000000,
+    judul: "Donasi Bencana Alam",
+    deskripsi1: "Bencana alam telah melanda daerah X.",
+    deskripsi2: "Mereka sangat membutuhkan bantuan logistik.",
+    rangkaian: [],
+    foto: Artikel2,
+    updated_at: "2025-08-28T14:30:00Z",
   },
 ];
 
-const DetailArtikel = () => {
+const dummyComments = [
+  {
+    id: 1,
+    nama: "Pak Beni",
+    isi: "Saya sangat mendukung program ini! Semoga semakin banyak anak yang terbantu.",
+  },
+  {
+    id: 2,
+    nama: "Pak Vira",
+    isi: "Mari kita bersama-sama terus berbagi kebahagiaan dengan mereka yang membutuhkan.",
+  },
+  {
+    id: 3,
+    nama: "Pak Vina",
+    isi: "Kegiatan ini bukan hanya bantuan materi, tapi juga menyentuh hati kami.",
+  },
+];
+
+const DetailArtikelRelawan = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [artikelList] = useState(dummyArtikelList);
-  const [comments, setComments] = useState([
-    { id: 1, name: "Park Joengseong", content: "Terima kasih, Aku merasa lebih bersyukur" },
-    { id: 2, name: "Lee Heeseung", content: "Acaranya sangat menginspirasi 😍" },
-  ]);
+  const artikel = dummyArtikelList.find((item) => item.id === parseInt(id));
+  const [comments, setComments] = useState(dummyComments);
   const [newComment, setNewComment] = useState("");
-
-  const artikel = artikelList.find((item) => item.id === parseInt(id));
-
-  const handleAddComment = () => {
-    if (newComment.trim() === "") return;
-    const newItem = {
-      id: Date.now(),
-      name: "Pengunjung",
-      content: newComment,
-    };
-    setComments([...comments, newItem]);
-    setNewComment("");
-  };
+  const [showFullText, setShowFullText] = useState(false);
 
   if (!artikel) return <div className="p-4">Artikel tidak ditemukan.</div>;
 
-  const persentase = Math.min(Math.round((artikel.terkumpul / artikel.target) * 100), 100);
+  const handleCommentSubmit = () => {
+    if (!newComment.trim()) return;
+    const newEntry = {
+      id: comments.length + 1,
+      nama: "Anda",
+      isi: newComment,
+    };
+    setComments([...comments, newEntry]);
+    setNewComment("");
+  };
+
+  const textPreview = artikel.deskripsi2.slice(0, 200);
+
+  // ✅ Tambahin persentase biar progress bar gak error
+  const persentase = 65; // contoh: 65%, bisa diganti dinamis nanti
 
   return (
-    <div className="flex min-h-screen bg-[#f5f5f5] text-[#111827] font-raleway">
+    <div className="flex min-h-screen bg-white text-[#111827] font-raleway relative">
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="p-6 max-w-3xl mx-auto w-full">
-          <div className="bg-white shadow rounded-xl p-6">
-            <h1 className="text-2xl font-bold mb-2 text-[#493953]">{artikel.title}</h1>
-            <p className="text-sm text-gray-500 mb-4">Tanggal: {artikel.date}</p>
-            <img
-              src={artikel.image}
-              alt="Artikel"
-              className="w-full h-64 object-cover rounded-lg mb-4"
-            />
-            <p className="text-base text-gray-800 leading-relaxed whitespace-pre-line">
-              {artikel.content}
-            </p>
 
-            {/* Progress Bar */}
-            <div className="mt-6">
-              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                <div
-                  className="h-3 rounded-full transition-all duration-500 bg-gradient-to-r from-[#ae9dc2] via-[#b998ec] to-[#c2dfeb]"
-                  style={{ width: `${persentase}%` }}
-                ></div>
-              </div>
-              <div className="flex justify-between text-xs mt-1 text-gray-600">
-                <span>Terkumpul: Rp{artikel.terkumpul.toLocaleString("id-ID")}</span>
-                <span>Target: Rp{artikel.target.toLocaleString("id-ID")}</span>
-              </div>
-              <div className="mt-4">
-                <button
-                  disabled
-                  className="px-3 py-1 bg-gradient-to-b from-[#bd8ddb] to-[#a86bce] text-white font-semibold rounded-full text-xs shadow-sm cursor-default"
-                >
-                  {persentase}% Tercapai
-                </button>
-              </div>
+        {/* Tombol Back */}
+        <button
+          onClick={() => navigate("/admin/artikel")}
+          className="absolute top-6 left-6 text-purple-600 hover:text-gray-800"
+        >
+          <img src={arrowIcon} alt="Kembali" className="w-6 h-6" />
+        </button>
+
+        {/* Box Utama */}
+        <main className="p-8 my-8 max-w-6xl mx-auto w-full bg-[#F0F0F0] rounded-xl shadow">
+          {/* Layout Artikel */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1">
+              <img
+                src={artikel.foto}
+                alt={artikel.judul}
+                className="w-full h-64 object-cover rounded-lg"
+              />
+            </div>
+
+            <div className="md:col-span-2 flex flex-col">
+              <h1 className="text-lg md:text-xl font-bold mb-2">
+                {artikel.judul}
+              </h1>
+              <p className="text-sm text-gray-600 mb-3">
+                {new Date(artikel.updated_at).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-gray-700 text-justify">{artikel.deskripsi1}</p>
             </div>
           </div>
 
+          {/* Progress Bar */}
+          <div className="w-full bg-white rounded-full h-2 overflow-hidden mb-2 mt-4">
+            <div
+              className="h-2 rounded-full transition-all duration-500 bg-[#25E02E]/50"
+              style={{ width: `${persentase}%` }}
+            ></div>
+          </div>
+
+          {/* Teks 2 */}
+          <div className="mt-6">
+            <p className="text-gray-700 leading-relaxed mb-4 text-justify">
+              {showFullText ? artikel.deskripsi2 : `${textPreview}...`}
+            </p>
+
+            <button
+              onClick={() => setShowFullText(!showFullText)}
+              className="text-sm text-[#493953] hover:underline"
+            >
+              {showFullText ? "Tutup" : "Baca Selengkapnya..."}
+            </button>
+
+            {artikel.rangkaian.length > 0 && (
+              <div className="mt-4">
+                <h2 className="font-semibold mb-2">Rangkaian Acara</h2>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                  {artikel.rangkaian.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/* Komentar */}
-          <div className="bg-white shadow mt-6 rounded-xl p-6">
-            <h2 className="text-lg font-semibold mb-4 text-[#493953]">Komentar</h2>
-
-            <div className="space-y-4 mb-4">
-              {comments.map((komentar) => (
-                <div key={komentar.id} className="bg-gray-100 rounded-lg p-3">
-                  <p className="text-sm font-semibold text-[#493953]">{komentar.name}</p>
-                  <p className="text-sm text-gray-700">{komentar.content}</p>
+          <div className="mt-8">
+            {comments.map((c) => (
+              <div key={c.id} className="flex items-start gap-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold">
+                  {c.nama.charAt(0)}
                 </div>
-              ))}
-            </div>
+                <div>
+                  <p className="font-semibold text-sm">{c.nama}</p>
+                  <p className="text-sm text-gray-700">{c.isi}</p>
+                </div>
+              </div>
+            ))}
 
-            <div className="flex items-center gap-2">
+            {/* Form Komentar */}
+            <div className="flex items-center gap-2 mt-4">
               <input
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Tulis komentar..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                className=" border border-[#5A4A6B] rounded-lg w-160 px-3 py-2 text-sm focus:outline-none  shadow-md shadow-gray-200"
               />
               <button
-                onClick={handleAddComment}
-                className="bg-[#8673A1] hover:bg-[#6e5c8a] text-white px-4 py-2 rounded-lg text-sm"
+                onClick={handleCommentSubmit}
+                className="bg-[#493953] text-white px-6 py-2 rounded-lg text-sm hover:bg-[#5f4a66] shadow-xl shadow-purple-300"
               >
                 Kirim
-              </button>
-            </div>
-
-            <div className="mt-6">
-              <button
-                onClick={() => navigate('/artikel')}
-                className="bg-[#584763] hover:bg-[#9f7db6] text-white px-4 py-2 rounded shadow"
-              >
-                ← Kembali
               </button>
             </div>
           </div>
@@ -148,4 +191,4 @@ const DetailArtikel = () => {
   );
 };
 
-export default DetailArtikel;
+export default DetailArtikelRelawan;

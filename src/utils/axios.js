@@ -12,16 +12,16 @@ const api = axios.create({
   },
 });
 
-// interceptor request → selalu kirim token kalau ada
+// Interceptor request → selalu kirim JWT kalau ada
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("jwt_token"); // ganti biar jelas jwt
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// interceptor response
+// Interceptor response → handle expired/invalid token
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -30,17 +30,18 @@ api.interceptors.response.use(
 
       // 401 → token invalid/expired → auto logout
       if (status === 401) {
-        localStorage.clear();
+        console.warn("JWT expired atau invalid. Auto logout...");
+        localStorage.removeItem("jwt_token");
+        localStorage.removeItem("role");
         window.location.href = "/login";
       }
 
-      // 403 → biarkan dilempar ke komponen
+      // 403 → forbidden (misal role tidak sesuai)
       if (status === 403) {
         console.warn("403 Forbidden: akses ditolak oleh server.");
       }
     }
 
-    // lempar error ke komponen biar bisa ditangani
     return Promise.reject(error);
   }
 );

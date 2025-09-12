@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import Sidebar from "../../../components/SidebarRelawan";
 import Navbar from "../../../components/NavbarRelawan";
@@ -24,46 +24,107 @@ const fontStyle = `
   }
 `;
 
-const dummyRelawans = [
-  {
-    id: 0,
-    username: "Relawan_01",
-    password: "12345678",
-    status: "Aktif",
-    lastLogin: "12:30:52, 12 Desember 2025",
-  },
-  {
-    id: 1,
-    username: "Relawan_02",
-    password: "87654321",
-    status: "Aktif",
-    lastLogin: "09:30:52, 12 Desember 2025",
-  },
-];
-
 const DataRelawan = () => {
-  const [relawans, setRelawan] = useState(dummyRelawans);
-  const [selectedRelawan, setSelectedRelawan] = useState(null);
+  const [admins, setAdmins] = useState([]);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [formData, setFormData] = useState({ username: "", password: "" });
 
-  const handleEditClick = (relawan) => {
-    setSelectedRelawan(relawan);
-    setFormData({ username: relawan.username, password: relawan.password });
+  // sementara pakai dummy data
+  useEffect(() => {
+    const dummyAdmins = [
+      {
+        id: 1,
+        username: "Relawan2",
+        password: "12345",
+        status: "Aktif",
+        lastLogin: "01-09-2025 08:30",
+      },
+      {
+        id: 2,
+        username: "Relawan1",
+        password: "qwerty",
+        status: "Nonaktif",
+        lastLogin: "28-08-2025 10:15",
+      },
+      {
+        id: 3,
+        username: "Relawan",
+        password: "super123",
+        status: "Aktif",
+        lastLogin: "31-08-2025 14:45",
+      },
+    ];
+
+    setAdmins(dummyAdmins);
+
+    // === kalau nanti BE sudah siap, tinggal aktifkan axios ini lagi ===
+    /*
+    const fetchAdmins = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://192.168.102.100:8000/api/admin", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAdmins(response.data.data || []);
+      } catch (error) {
+        console.error("Gagal mengambil data admin:", error);
+      }
+    };
+    fetchAdmins();
+    */
+  }, []);
+
+  const handleEditClick = (admin) => {
+    setSelectedAdmin(admin);
+    setFormData({ username: admin.username, password: admin.password });
   };
 
   const handleCloseModal = () => {
-    setSelectedRelawan(null);
+    setSelectedAdmin(null);
   };
 
-  const handleSaveChanges = () => {
-    setRelawan((prev) =>
-      prev.map((relawan) =>
-        relawan.id === selectedRelawan.id
-          ? { ...relawan, username: formData.username, password: formData.password }
-          : relawan
+  const handleSaveChanges = async () => {
+    // sementara langsung update state aja (dummy mode)
+    setAdmins((prev) =>
+      prev.map((admin) =>
+        admin.id === selectedAdmin.id
+          ? { ...admin, username: formData.username, password: formData.password }
+          : admin
       )
     );
+
     handleCloseModal();
+
+    // kalau nanti BE sudah siap, balik lagi ke axios PUT ini
+    /*
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `http://192.168.102.100:8000/api/admin/${selectedAdmin.id}`,
+        {
+          username: formData.username,
+          password: formData.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAdmins((prev) =>
+        prev.map((admin) =>
+          admin.id === selectedAdmin.id
+            ? { ...admin, username: formData.username, password: formData.password }
+            : admin
+        )
+      );
+      handleCloseModal();
+    } catch (error) {
+      console.error("Gagal update data admin:", error);
+    }
+    */
   };
 
   return (
@@ -80,21 +141,21 @@ const DataRelawan = () => {
             <h2 className="text-2xl font-bold text-[#493953] mb-6">Data Relawan</h2>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {relawans.map((relawan) => (
+              {admins.map((admin) => (
                 <div
-                  key={relawan.id}
+                  key={admin.id}
                   className="bg-white rounded-xl p-5 shadow hover:shadow-md transition-all border border-gray-100"
                 >
                   <div className="text-sm text-gray-700 mb-4 space-y-1">
-                    <p><span className="font-semibold">Username:</span> {relawan.username}</p>
-                    <p><span className="font-semibold">Password:</span> {relawan.password}</p>
-                    <p><span className="font-semibold">Status:</span> {relawan.status}</p>
-                    <p><span className="font-semibold">Last Login:</span> {relawan.lastLogin}</p>
+                    <p><span className="font-semibold">Username:</span> {admin.username}</p>
+                    <p><span className="font-semibold">Password:</span> {admin.password}</p>
+                    <p><span className="font-semibold">Status:</span> {admin.status}</p>
+                    <p><span className="font-semibold">Last Login:</span> {admin.lastLogin}</p>
                   </div>
                   <button
-                    onClick={() => handleEditClick(relawan)}
-                    title="Edit data relawan"
-                    className="mt-2 bg-gradient-to-r from-[#8673A1] to-[#A084CA] text-white px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2"
+                    onClick={() => handleEditClick(admin)}
+                    title="Edit data admin"
+                    className="mt-2 bg-[#5a4b6b] text-white px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2"
                   >
                     <FiEdit size={16} />
                     Edit
@@ -106,7 +167,7 @@ const DataRelawan = () => {
         </main>
 
         {/* Modal Edit */}
-        {selectedRelawan && (
+        {selectedAdmin && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm">
             <div className="bg-white p-6 rounded-2xl shadow-2xl w-[90vw] max-w-md border border-purple-300">
               <h3 className="text-xl font-semibold mb-4 text-[#493953] text-center">Edit Relawan</h3>
@@ -140,7 +201,7 @@ const DataRelawan = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                   <input
                     type="text"
-                    value={selectedRelawan.status}
+                    value={selectedAdmin.status}
                     disabled
                     className="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
                   />
@@ -155,7 +216,7 @@ const DataRelawan = () => {
                   </button>
                   <button
                     onClick={handleSaveChanges}
-                    className="px-4 py-2 bg-gradient-to-r from-[#8673A1] to-[#A084CA] text-white rounded-lg shadow-md hover:shadow-lg transition"
+                    className="px-4 py-2 bg-[#5a4b6b] text-white rounded-lg shadow-md hover:shadow-lg transition"
                   >
                     Simpan
                   </button>

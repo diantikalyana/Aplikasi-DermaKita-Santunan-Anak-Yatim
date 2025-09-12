@@ -2,157 +2,134 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
-import axios from "../../../utils/axios"; 
 import Artikel1 from "../../../assets/Artikel1.png";
 
-const EditArtikel = () => {
+const EditArtikelInline = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [artikel, setArtikel] = useState(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    const fetchArtikel = async () => {
-      try {
-        const res = await axios.get(`/artikel/${id}`);
-        const artikel = res.data;
-
-        setTitle(artikel.judul || "");
-        setDate(artikel.created_at?.split("T")[0] || ""); // atau pakai tanggal khusus
-        setContent(artikel.text || "");
-        setPreview(`https://192.168.103.162:8000/storage/${artikel.foto}`);
-      } catch (err) {
-        console.error("Gagal memuat artikel:", err);
-        alert("Artikel tidak ditemukan atau gagal dimuat.");
-        navigate("/artikel");
-      } finally {
-        setLoading(false);
-      }
+    // Dummy data
+    const dummy = {
+      id,
+      judul: "Kegiatan Santunan Anak Yatim di Kajoran: Merajut Harapan, Menebar Kebaikan",
+      tanggal: "2025-07-12",
+      konten: `Kajoran, 12 Juli 2025 — Suasana haru dan kebahagiaan menyelimuti acara Santunan Anak Yatim yang diselenggarakan di wilayah Kajoran. 
+Kegiatan ini merupakan bentuk kepedulian sosial kepada anak-anak yatim yang membutuhkan uluran tangan, sekaligus sebagai wujud nyata dari semangat kemanusiaan dan solidaritas masyarakat.`,
+      foto: Artikel1,
     };
+    setArtikel(dummy);
+  }, [id]);
 
-    fetchArtikel();
-  }, [id, navigate]);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file));
-    }
+  const handleSave = () => {
+    alert("Dummy: Artikel berhasil disimpan!");
+    navigate("/admin/artikel");
   };
 
-  const handleSave = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("judul", title);
-      formData.append("text", content);
-      if (image) formData.append("foto", image);
-
-      await axios.post(`/artikel/update/${id}`, formData); // pastikan sesuai endpoint backend
-      alert("Artikel berhasil diperbarui.");
-      navigate("/artikel");
-    } catch (err) {
-      console.error("Gagal menyimpan:", err);
-      alert("Gagal menyimpan artikel.");
-    }
-  };
-
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (window.confirm("Yakin ingin menghapus artikel ini?")) {
-      try {
-        await axios.delete(`/artikel/${id}`);
-        alert("Artikel berhasil dihapus.");
-        navigate("/artikel");
-      } catch (err) {
-        console.error("Gagal menghapus:", err);
-        alert("Gagal menghapus artikel.");
-      }
+      alert("Dummy: Artikel berhasil dihapus!");
+      navigate("/admin/artikel");
     }
   };
 
-  if (loading) return <div className="p-4">Memuat artikel...</div>;
+  if (!artikel) return <div>Loading...</div>;
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5] text-[#111827] font-raleway">
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="p-6 max-w-3xl mx-auto w-full">
+        <main className="p-6 max-w-5xl mx-auto w-full">
           <div className="bg-white shadow rounded-xl p-6 space-y-4">
-            <h1 className="text-xl font-bold text-[#493953]">Edit Artikel</h1>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Judul</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Tanggal</label>
-              <input
-                type="text"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 text-sm"
-                disabled
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Konten</label>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={8}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Gambar</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="mt-1"
-              />
-              {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="mt-4 w-full h-64 object-cover rounded-lg"
-                />
+            <div className="flex justify-between items-center">
+              <h1 className="text-xl font-bold text-[#493953]">Edit Artikel</h1>
+              {!editing ? (
+                <button
+                  onClick={() => setEditing(true)}
+                  className="bg-[#6d4e9e] hover:bg-[#5c3f89] text-white px-4 py-2 rounded-lg text-sm"
+                >
+                  Edit
+                </button>
+              ) : (
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSave}
+                    className="bg-[#6d4e9e] hover:bg-[#5c3f89] text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Simpan Perubahan
+                  </button>
+                </div>
               )}
             </div>
 
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={handleSave}
-                className="bg-[#6d4e9e] hover:bg-[#5c3f89] text-white px-4 py-2 rounded-lg text-sm"
-              >
-                Simpan
-              </button>
-              <button
-                onClick={handleDelete}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
-              >
-                Hapus
-              </button>
-              <button
-                onClick={() => navigate("/artikel")}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg text-sm"
-              >
-                ← Batal
-              </button>
+            {/* Artikel Preview + Inline Edit */}
+            <div className="flex gap-6">
+              {/* Gambar */}
+              <div className="w-1/3">
+                <img
+                  src={artikel.foto}
+                  alt="Artikel"
+                  className="rounded-lg shadow w-full object-cover"
+                />
+                {editing && (
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setArtikel({
+                          ...artikel,
+                          foto: URL.createObjectURL(file),
+                        });
+                      }
+                    }}
+                    className="mt-2 text-sm"
+                  />
+                )}
+              </div>
+
+              {/* Konten */}
+              <div className="flex-1 space-y-3">
+                {editing ? (
+                  <input
+                    type="text"
+                    value={artikel.judul}
+                    onChange={(e) =>
+                      setArtikel({ ...artikel, judul: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 font-bold text-lg"
+                  />
+                ) : (
+                  <h2 className="font-bold text-lg">{artikel.judul}</h2>
+                )}
+
+                <p className="text-sm text-gray-500">
+                  {new Date(artikel.tanggal).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+
+                {editing ? (
+                  <textarea
+                    value={artikel.konten}
+                    onChange={(e) =>
+                      setArtikel({ ...artikel, konten: e.target.value })
+                    }
+                    rows={10}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                ) : (
+                  <p className="text-sm whitespace-pre-line">
+                    {artikel.konten}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </main>
@@ -161,4 +138,4 @@ const EditArtikel = () => {
   );
 };
 
-export default EditArtikel;
+export default EditArtikelInline;

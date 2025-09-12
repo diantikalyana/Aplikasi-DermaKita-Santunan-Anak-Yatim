@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "../../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
@@ -32,6 +31,7 @@ const UploadArtikel = () => {
     title: "",
     excerpt: "",
     content: "",
+    target: "",
     image: null,
   });
 
@@ -51,18 +51,26 @@ const UploadArtikel = () => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append("title", form.title);
-      formData.append("excerpt", form.excerpt);
-      formData.append("content", form.content);
-      if (form.image) formData.append("image", form.image);
+      const newArtikel = {
+        id: Date.now(), // ID unik
+        title: form.title,
+        excerpt: form.excerpt,
+        content: form.content,
+        target: parseInt(form.target, 10),
+        image: form.image ? URL.createObjectURL(form.image) : null, // preview gambar
+        mulai: new Date().toISOString(),
+        terkumpul: 0,
+      };
 
-      await axios.post("/artikel", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      // ambil artikel lama dari localStorage
+      const existing = JSON.parse(localStorage.getItem("artikelList")) || [];
 
-      alert("Artikel berhasil diunggah!");
-      navigate("/artikel");
+      // simpan artikel baru + lama
+      const updated = [newArtikel, ...existing];
+      localStorage.setItem("artikelList", JSON.stringify(updated));
+
+      // pindah ke halaman daftar artikel
+      navigate("/admin/artikel");
     } catch (error) {
       console.error("Gagal upload artikel:", error);
       alert("Gagal mengunggah artikel.");
@@ -72,92 +80,122 @@ const UploadArtikel = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#f5f5f5] text-[#111827] font-raleway">
+    <div className="flex min-h-screen bg-white text-[#111827] font-raleway">
       <style>{fontStyle}</style>
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="p-6 max-w-4xl mx-auto w-full">
-          <h1 className="text-2xl font-bold mb-6 text-[#493953]">Upload Artikel</h1>
 
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-xl shadow-md space-y-6 border border-gray-100"
-          >
-            <div>
-              <label className="block text-sm font-semibold mb-2">Judul Artikel</label>
-              <input
-                type="text"
-                name="title"
-                value={form.title}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
-              />
-            </div>
+        <main className="p-6 max-w-6xl mx-auto w-full">
+          <div className="bg-[#f7f7f7] rounded-xl shadow p-6 border border-gray-200">
+            {/* Header Form */}
+            <h1 className="text-xl font-bold mb-6 text-[#493953]">
+              Upload Artikel
+            </h1>
 
-            <div>
-              <label className="block text-sm font-semibold mb-2">Deskripsi Singkat</label>
-              <textarea
-                name="excerpt"
-                value={form.excerpt}
-                onChange={handleChange}
-                required
-                rows="2"
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold mb-2">Isi Artikel</label>
-              <textarea
-                name="content"
-                value={form.content}
-                onChange={handleChange}
-                required
-                rows="6"
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold mb-2">Upload Gambar</label>
-
-              <div className="flex items-center space-x-4">
-                <input
-                  id="upload-image"
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="hidden"
-                />
-
-                <label
-                  htmlFor="upload-image"
-                  className="inline-block bg-[#8673A1] text-white px-4 py-2 rounded cursor-pointer hover:bg-[#6e5c8a] transition-all duration-150"
-                >
-                  Pilih Gambar
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Judul */}
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Judul Artikel
                 </label>
-
-                {form.image && (
-                  <span className="text-sm text-gray-600 italic truncate max-w-[200px]">
-                    {form.image.name}
-                  </span>
-                )}
+                <input
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-[#e9e9e9] px-3 py-2 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
+                />
               </div>
-            </div>
 
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-[#8673A1] text-white px-6 py-2 rounded-lg shadow hover:bg-[#6e5c8a] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
-              >
-                {isSubmitting ? "Mengunggah..." : "Unggah Artikel"}
-              </button>
-            </div>
-          </form>
+              {/* Deskripsi Singkat */}
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Deskripsi Singkat
+                </label>
+                <textarea
+                  name="excerpt"
+                  value={form.excerpt}
+                  onChange={handleChange}
+                  rows="2"
+                  required
+                  className="w-full bg-[#e9e9e9] px-3 py-2 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
+                />
+              </div>
+
+              {/* Isi Artikel */}
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Isi Artikel
+                </label>
+                <textarea
+                  name="content"
+                  value={form.content}
+                  onChange={handleChange}
+                  rows="6"
+                  required
+                  className="w-full bg-[#e9e9e9] px-3 py-2 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
+                />
+              </div>
+
+              {/* Target Donasi */}
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Target Donasi
+                </label>
+                <input
+                  type="number"
+                  name="target"
+                  value={form.target}
+                  onChange={handleChange}
+                  min="1000"
+                  required
+                  className="w-full bg-[#e9e9e9] px-3 py-2 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-[#8673A1]"
+                />
+              </div>
+
+              {/* Upload Gambar */}
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Upload Gambar
+                </label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    id="upload-image"
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleChange}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="upload-image"
+                    className="inline-block bg-[#493953] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#6e5c8a] transition-all"
+                  >
+                    Pilih Gambar
+                  </label>
+                  {form.image && (
+                    <span className="text-sm text-gray-600 italic truncate max-w-[200px]">
+                      {form.image.name}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit */}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-[#493953] text-white px-6 py-2 rounded-md shadow hover:bg-[#6e5c8a] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? "Mengunggah..." : "Upload"}
+                </button>
+              </div>
+            </form>
+          </div>
         </main>
       </div>
     </div>

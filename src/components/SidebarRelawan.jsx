@@ -36,11 +36,11 @@ const SidebarRelawan = () => {
 
   const links = [
     { name: "Dashboard", to: "/relawan/dashboard" },
-    { name: "Dokumentasi", to: "/relawan/dokumentasirelawan" },
-    { name: "Data Anak Yatim", to: "/data-anak-yatimrelawan" },
-    { name: "Laporan", to: "/laporanrelawan" },
-    { name: "Data Relawan", to: "/datarelawan" },
-    { name: "Artikel", to: "/artikelrelawan" },
+    { name: "Data Anak Yatim", to: "/relawan/data-anak-yatim" },
+    { name: "Laporan", to: "/relawan/laporan" },
+    { name: "Data Relawan", to: "/relawan/data" },
+    { name: "Dokumentasi", to: "/relawan/dokumentasi" },
+    { name: "Artikel", to: "/relawan/artikel" },
     
   ];
 
@@ -51,7 +51,7 @@ const SidebarRelawan = () => {
       {/* Atas: Logo & Navigasi */}
       <div>
         <div className="flex items-center justify-center mb-10 text-raleway font-bold text-2xl">
-          <img src={logo} alt="logo" className="h-30 w-30" />
+          <img src={logo} alt="logo" className="h-22 w-auto" />
         </div>
 
         {/* Navigasi */}

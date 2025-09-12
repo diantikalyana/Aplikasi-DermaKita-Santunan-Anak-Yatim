@@ -1,7 +1,7 @@
 // src/pages/Dashboard/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../../utils/axios"; 
+// import api from "../../../utils/axios";  // ❌ dimatiin dulu
 import Navbar from "../../../components/NavbarRelawan";
 import Sidebar from "../../../components/SidebarRelawan";
 
@@ -26,7 +26,7 @@ const fontStyle = `
   }
 `;
 
-export default function Dashboard() {
+export default function DashboardRelawan() {
   const navigate = useNavigate();
   const [jumlahAnak, setJumlahAnak] = useState(0);
   const [totalDonasi, setTotalDonasi] = useState(0);
@@ -42,6 +42,17 @@ export default function Dashboard() {
       return;
     }
 
+    // --- Dummy data (tanpa API) ---
+    setLoading(true);
+    setTimeout(() => {
+      setJumlahAnak(25);        // contoh jumlah anak
+      setTotalDonasi(5000000);  // contoh total donasi
+      setJumlahPenyalur(12);    // contoh jumlah penyalur
+      setLoading(false);
+    }, 1000);
+
+    // --- Aslinya kalau API ---
+    /*
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -70,6 +81,7 @@ export default function Dashboard() {
     };
 
     fetchData();
+    */
   }, [navigate]);
 
   return (
@@ -93,14 +105,14 @@ export default function Dashboard() {
 
           {!loading && !errorMsg && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link to="/data-anak-yatim">
+              <Link to="/relawan/data-anak-yatim">
                 <div className="bg-[#493953] text-white p-6 rounded-xl shadow cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95">
                   <p className="font-semibold text-sm text-gray-200">Jumlah Anak Yatim</p>
                   <h2 className="text-3xl font-bold mt-2">{jumlahAnak}</h2>
                 </div>
               </Link>
 
-              <Link to="/Laporan">
+              <Link to="/relawan/laporan">
                 <div className="bg-[#493953] text-white p-6 rounded-xl shadow cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95">
                   <p className="font-semibold text-sm text-gray-200">Donasi Terkumpul</p>
                   <h2 className="text-3xl font-bold mt-2">
@@ -109,7 +121,7 @@ export default function Dashboard() {
                 </div>
               </Link>
 
-              <Link to="/Laporan">
+              <Link to="/relawan/laporan">
                 <div className="bg-[#493953] text-white p-6 rounded-xl shadow cursor-pointer transform transition-transform duration-300 hover:scale-105 active:scale-95">
                   <p className="font-semibold text-sm text-gray-200">Penyalur Aktif</p>
                   <h2 className="text-3xl font-bold mt-2">{jumlahPenyalur}</h2>

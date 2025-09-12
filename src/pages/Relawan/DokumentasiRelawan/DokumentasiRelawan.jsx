@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../../components/NavbarRelawan";
 import Sidebar from "../../../components/SidebarRelawan";
-import api from "../../../utils/axios";
+// import api from "../../../utils/axios"; // axios dikomen dulu
 
 const fontStyle = `
   @font-face { font-family: 'Raleway'; src: url('/fonts/Raleway-Regular.woff2') format('woff2'); font-weight: 400; }
@@ -25,37 +25,33 @@ const DokumentasiRelawan = () => {
       return;
     }
 
-    const fetchData = async () => {
+    const fetchDummy = async () => {
       setLoading(true);
       setErrorMsg("");
       try {
-        let endpoint = "/dokumentasi-relawan";
-        if (jenis) endpoint = `/dokumentasi-relawan/filter?jenis=${jenis}`;
+        // Dummy data
+        const dummyData = [
+         
+        ];
 
-        const res = await api.get(endpoint);
-        setDokData(res.data?.data || []);
-      } catch (error) {
-        console.error("Gagal memuat data dokumentasi:", error);
-        if (error.response?.status === 401) {
-          localStorage.clear();
-          navigate("/login");
-        } else if (error.response?.status === 403) {
-          setErrorMsg("Anda tidak memiliki akses ke dokumentasi.");
+        // filter dummy sesuai params
+        if (jenis) {
+          setDokData(dummyData.filter((item) => item.jenis_dokumentasi === jenis));
         } else {
-          setErrorMsg("Terjadi kesalahan saat memuat data dokumentasi.");
+          setDokData(dummyData);
         }
+      } catch (error) {
+        console.error("Gagal memuat data dummy:", error);
+        setErrorMsg("Terjadi kesalahan saat memuat data dummy.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchDummy();
   }, [navigate, jenis]);
 
   const handleNavigate = (tujuan) => navigate(tujuan);
-
-  const getImageUrl = (filename) =>
-    `${process.env.REACT_APP_API_BASE_URL.replace("/api", "")}/uploads/${filename}`;
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-raleway">
@@ -78,7 +74,7 @@ const DokumentasiRelawan = () => {
 
               <div className="flex flex-col md:flex-row gap-8 mt-6">
                 <button
-                  onClick={() => handleNavigate("/relawan/dokumentasirelawan/umum")}
+                  onClick={() => handleNavigate("/relawan/dokumentasi/umum")}
                   className="relative w-72 h-32 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-700 text-white rounded-2xl text-2xl font-semibold shadow-lg hover:scale-105 transition-transform duration-300 group"
                 >
                   <span className="relative z-10">Dokumentasi Donasi Umum</span>
@@ -86,7 +82,7 @@ const DokumentasiRelawan = () => {
                 </button>
 
                 <button
-                  onClick={() => handleNavigate("/relawan/dokumentasirelawan/khusus")}
+                  onClick={() => handleNavigate("/relawan/dokumentasi/khusus")}
                   className="relative w-72 h-32 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-700 text-white rounded-2xl text-2xl font-semibold shadow-lg hover:scale-105 transition-transform duration-300 group"
                 >
                   <span className="relative z-10">Dokumentasi Khusus</span>
@@ -99,7 +95,7 @@ const DokumentasiRelawan = () => {
                   <div key={item.id_dokumentasi} className="p-4 bg-white rounded-xl shadow-md flex flex-col md:flex-row gap-4">
                     {item.upload_foto && (
                       <img
-                        src={getImageUrl(item.upload_foto)}
+                        src={item.upload_foto}
                         alt={item.tempat}
                         className="w-full md:w-48 h-32 object-cover rounded-lg"
                       />
@@ -117,7 +113,7 @@ const DokumentasiRelawan = () => {
                       )}
                     </div>
                   </div>
-                )) : <p className="text-gray-500 italic">Belum ada dokumentasi</p>}
+                )) : <p className="text-gray-500 italic"></p>}
               </div>
             </>
           )}

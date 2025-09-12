@@ -33,7 +33,7 @@ const fontStyle = `
   }
 `;
 
-export default function Detailanak() {
+export default function LaporanRelawan() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -69,23 +69,28 @@ export default function Detailanak() {
       <div className="flex-1 flex flex-col">
         <Navbar />
         <main className="p-8 flex-1">
-          <h1 className="text-2xl font-bold mb-6 text-gray-800">Detail Anak Yatim</h1>
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-8">
+  {/* Card 1 */}
+  <div className="bg-[#5a4b6b] text-white p-4 w-[250px] h-[120px] rounded-lg shadow flex flex-col justify-center items-center">
+    <h3 className="text-xl font-medium">Total Donasi Masuk</h3>
+    <p className="text-3xl font-bold">Rp10.000.000</p>
+  </div>
 
-          {/* 3 Card Statistik */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-[#6B4E71] text-white p-4 rounded-lg shadow">
-              <h3 className="text-sm font-medium">Total Donasi Masuk</h3>
-              <p className="text-xl font-bold">Rp10.000.000</p>
-            </div>
-            <div className="bg-[#6B4E71] text-white p-4 rounded-lg shadow">
-              <h3 className="text-sm font-medium">Jumlah Anak Terbantu</h3>
-              <p className="text-xl font-bold">120</p>
-            </div>
-            <div className="bg-[#6B4E71] text-white p-4 rounded-lg shadow">
-              <h3 className="text-sm font-medium">Jumlah Penyalur</h3>
-              <p className="text-xl font-bold">50</p>
-            </div>
-          </div>
+  {/* Card 2 */}
+  <div className="bg-[#5a4b6b] text-white w-[250px] h-[120px] rounded-lg shadow flex flex-col justify-center items-center">
+    <h3 className="text-xl font-medium">Jumlah Anak Terbantu</h3>
+    <p className="text-3xl font-bold">120</p>
+  </div>
+
+  {/* Card 3 */}
+  <div className="bg-[#5a4b6b] text-white p-4 w-[250px] h-[120px] rounded-lg shadow flex flex-col justify-center items-center">
+    <h3 className="text-xl font-medium">Jumlah Penyalur</h3>
+    <p className="text-3xl font-bold">50</p>
+  </div>
+</div>
+
+
+
 
         {/* Grafik Per Bulan */}
 <div className="relative z-0 mb-10">
@@ -95,20 +100,21 @@ export default function Detailanak() {
       <XAxis dataKey="bulan" />
       <YAxis tickFormatter={(value) => `Rp${(value / 1000000).toFixed(1)}jt`} />
       <Tooltip formatter={(value) => `Rp${value.toLocaleString()}`} />
-      <Bar dataKey="donasi" fill="#6B4E71" barSize={85} />
+      <Bar dataKey="donasi" fill="#5a4b6b" barSize={85} />
     </BarChart>
   </ResponsiveContainer>
 </div>
 
   {/* Tombol Lanjut */}
-          <div className="flex justify-right">
-            <button
-              onClick={() => navigate("/laporan/datapenyaluran")}
-              className="inline-flex items-center px-6 py-2 bg-[#5C457E] hover:bg-[#47366e] text-white rounded-lg transition"
-            >
-              Lanjut →
-            </button>
-          </div>
+<div className="flex justify-start">
+  <button
+    onClick={() => navigate("/relawan/laporan/1")} 
+    className="inline-flex items-center px-6 py-2 bg-[#5a4b6b] hover:bg-[#47366e] text-white rounded-lg transition"
+  >
+    Lihat Data Penyaluran →
+  </button>
+</div>
+
         </main>
       </div>
     </div>

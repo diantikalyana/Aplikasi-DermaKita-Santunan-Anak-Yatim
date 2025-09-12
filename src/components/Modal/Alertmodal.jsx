@@ -13,7 +13,7 @@ const Alertmodal = ({
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50">
-      <div className="bg-gradient-to-b from-[#836d91] via-[#8c809c] to-[#cab6e4] rounded-lg shadow-lg w-full max-w-md p-6 z-[1000]">
+      <div className="bg-[#5a4b6b] rounded-lg shadow-lg w-full max-w-md p-6 z-[1000]">
         <h2 className="text-xl font-bold text-gray-100 mb-4">{title}</h2>
         <p className="text-gray-200 mb-6">{message}</p>
         <div className="flex justify-end gap-3">
