@@ -9,7 +9,6 @@ import SignupPage from "./pages/User/Autentifikasi/SignupPage";
 // ================= ADMIN =================
 import DashboardAdmin from "./pages/Admin/DashboardAdmin";
 import NotifikasiAdmin from "./pages/Admin/Notifikasi";
-import ProfileAdmin from "./pages/Admin/ProfileAdmin";
 import DetailAnakAdmin from "./pages/Admin/data-anak-yatim/Detail";
 import DonasiAdmin from "./pages/Admin/Donasi";
 import DetailAnakByIdAdmin from "./pages/Admin/data-anak-yatim/Detailanak";
@@ -56,7 +55,7 @@ import EditDataPenyaluranRelawan from "./pages/Relawan/LaporanRelawan/EditDataPe
 import EditRekapPenyaluranRelawan from "./pages/Relawan/LaporanRelawan/EditRekapPenyaluranRelawan";
 import DataRelawan from "./pages/Relawan/DataRelawan/DataRelawan";
 import NotifikasiRelawan from "./pages/Relawan/NotifikasiRelawan/NotifikasiRelawan";
-import ProfileRelawan from "./pages/Relawan/ProfileRelawan/ProfileRelawan";
+
 
 // ================= SHARED =================
 import DetailDokumentasi from "./pages/Shared/Dokumentasi/DetailDokumentasiRelawan";
@@ -87,7 +86,7 @@ import NotifikasiUser from "./pages/User/HalamanTambahan/NotifikasiUser";
 import ProfilPage from "./pages/User/HalamanTambahan/ProfilPage";
 import SearchPage from "./pages/User/HalamanTambahan/SearchPage";
 import SearchResultsPage from "./pages/User/SearchResultsPage";
-import Keluar from "./pages/User/Logout/Keluar";
+
 
 // ================= UNAUTHORIZED & FALLBACK =================
 const Unauthorized = () => <h1>403 - Unauthorized</h1>;
@@ -105,7 +104,7 @@ const App = () => {
         {/* ================= ADMIN ================= */}
         <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><DashboardAdmin /></ProtectedRoute>} />
         <Route path="/admin/notifikasi" element={<ProtectedRoute allowedRoles={["admin"]}><NotifikasiAdmin /></ProtectedRoute>} />
-        <Route path="/admin/profile" element={<ProtectedRoute allowedRoles={["admin"]}><ProfileAdmin /></ProtectedRoute>} />
+
         <Route path="/admin/data-anak-yatim" element={<ProtectedRoute allowedRoles={["admin"]}><DetailAnakAdmin /></ProtectedRoute>} />
         <Route path="/admin/donasi" element={<ProtectedRoute allowedRoles={["admin"]}><DonasiAdmin /></ProtectedRoute>} />
         <Route path="/admin/data-anak-yatim/detailanak/:id" element={<ProtectedRoute allowedRoles={["admin"]}><DetailAnakByIdAdmin /></ProtectedRoute>} />
@@ -152,7 +151,7 @@ const App = () => {
         <Route path="/relawan/laporan/editrekap/:id" element={<EditRekapPenyaluranRelawan />} />
         <Route path="/relawan/data" element={<ProtectedRoute allowedRoles={["relawan"]}><DataRelawan /></ProtectedRoute>} />
         <Route path="/relawan/notifikasi" element={<ProtectedRoute allowedRoles={["relawan"]}><NotifikasiRelawan /></ProtectedRoute>} />
-        <Route path="/relawan/profilerelawan/profilerelawan" element={<ProtectedRoute allowedRoles={["relawan"]}><ProfileRelawan/></ProtectedRoute>} />
+       
 
         {/* ================= USER ================= */}
         <Route path="/" element={<LandingPage />} />
@@ -172,7 +171,8 @@ const App = () => {
         <Route path="/user/menuutama/riwayatpage" element={<ProtectedRoute allowedRoles={["user"]}><RiwayatPage /></ProtectedRoute>} />
         <Route path="/user/artikel/beritaurgensi" element={<ProtectedRoute allowedRoles={["user"]}><BeritaUrgensi /></ProtectedRoute>} />
         <Route path="/user/artikel/detailberitaurgensi/:id" element={<ProtectedRoute allowedRoles={["user"]}><DetailBeritaUrgensi /></ProtectedRoute>} />
-        <Route path="/user/daftarrelawan/daftarrelawan" element={<ProtectedRoute allowedRoles={["user"]}><DaftarRelawan /></ProtectedRoute>} />
+       <Route path="/user/daftarrelawan/daftarrelawan" element={<DaftarRelawan />} />
+
         <Route path="/faq" element={<FAQ />} />
         <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
         <Route path="/kelola-akun" element={<KelolaAkun />} />
@@ -180,7 +180,6 @@ const App = () => {
         <Route path="/profil" element={<ProfilPage />} />
         <Route path="/user/halamantambahan" element={<SearchPage />} />
         <Route path="/user" element={<SearchResultsPage />} />
-        <Route path="/logout" element={<Keluar />} />
 
         {/* ================= UNAUTHORIZED & FALLBACK ================= */}
         <Route path="/unauthorized" element={<Unauthorized />} />

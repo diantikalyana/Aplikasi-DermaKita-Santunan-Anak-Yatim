@@ -15,7 +15,7 @@ const fontStyle = `
   @font-face {
     font-family: 'Raleway';
     src: url('/fonts/Raleway-SemiBold.woff2') format('woff2');
-    font-weight: 600;
+    font-weight: 600; 
   }
   @font-face {
     font-family: 'Raleway';

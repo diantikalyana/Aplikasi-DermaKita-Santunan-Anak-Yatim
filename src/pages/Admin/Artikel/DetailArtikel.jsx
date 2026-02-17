@@ -7,6 +7,7 @@ import Artikel2 from "../../../assets/Artikel2.png";
 import arrowIcon from "../../../assets/Arrow.png";
 
 
+
 import "@fontsource/raleway"; 
 
 const dummyArtikelList = [

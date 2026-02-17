@@ -1,7 +1,9 @@
+// src/pages/Admin/DataAnakYatim/Detail.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
+import Loading from "../../../components/Loading"; // ✅ tambahkan ini
 
 const fontStyle = `
   @font-face {
@@ -29,15 +31,13 @@ const StatusBadge = ({ status }) => {
     Aktif: "bg-[#52DE3D]",
     "Tidak Aktif": "bg-[#F23F27]",
   };
-
   const colorClass = statusColors[status] || "bg-gray-500";
   return (
-  <span
-  className={`flex items-center justify-center text-black text-xs font-medium px-3 py-1 rounded-md ${colorClass}`}
->
-  {status}
-</span>
-
+    <span
+      className={`flex items-center justify-center text-black text-xs font-medium px-3 py-1 rounded-md ${colorClass}`}
+    >
+      {status}
+    </span>
   );
 };
 
@@ -77,12 +77,17 @@ const Detail = () => {
     setTimeout(() => {
       setDataAnakYatim(dummyData);
       setLoading(false);
-    }, 1000);
+    }, 1500);
   }, []);
 
   const handleClick = (id) => {
     navigate(`/admin/data-anak-yatim/detailanak/${id}`);
   };
+
+  // ✅ kalau masih loading, tampilkan animasi loading-nya
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex min-h-screen font-raleway bg-white text-gray-800">
@@ -98,21 +103,17 @@ const Detail = () => {
                 onClick={() => navigate("/admin/data-anak-yatim/pengajuan")}
                 className="flex flex-col items-start text-left bg-[#493953] hover:bg-[#836f8f] px-6 py-3 rounded-lg shadow transition relative text-white w-70"
               >
-                {/* Judul */}
                 <span className="text-lg font-normal">Cek & Verifikasi Data</span>
-                {/* Subjudul italic */}
                 <span className="text-sm italic">Perlu peninjauan</span>
               </button>
             </div>
 
-            {loading ? (
-              <p className="p-4">Memuat data...</p>
-            ) : dataAnakYatim.length === 0 ? (
+            {dataAnakYatim.length === 0 ? (
               <p className="p-4 text-gray-500">Data tidak tersedia.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm text-left text-gray-700">
-                  <thead className="bg-[#f0f0f0] border-b w-70 border-[#c1b9ca]">
+                  <thead className="bg-[#f0f0f0] border-b border-[#c1b9ca]">
                     <tr>
                       <th className="px-4 py-2">No</th>
                       <th className="px-4 py-2">Nama Lengkap</th>

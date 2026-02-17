@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
 import Artikel1 from "../../../assets/Artikel1.png";
-import Loading from "../../../components/Loading";
+import Loading from "../../../components/Loading"; // ✅ Loader titik berjalan
 import editIcon from "../../../assets/edit.png";
 import trashIcon from "../../../assets/trash.png";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
@@ -35,13 +35,13 @@ const Artikel = () => {
   const [loading, setLoading] = useState(true);
   const [openMenu, setOpenMenu] = useState(null);
 
-  // state buat modal
+  // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedArtikel, setSelectedArtikel] = useState(null);
 
   useEffect(() => {
+    // Simulasi loading data
     setLoading(true);
-
     const dummyArtikel = [
       {
         id: 1,
@@ -80,10 +80,10 @@ const Artikel = () => {
     setTimeout(() => {
       setArtikelList(dummyArtikel);
       setLoading(false);
-    }, 1000);
+    }, 1200);
   }, []);
 
-  // fungsi hapus
+  // Fungsi hapus artikel
   const handleDelete = () => {
     if (selectedArtikel) {
       setArtikelList((prev) =>
@@ -94,17 +94,20 @@ const Artikel = () => {
     }
   };
 
+  // ⛔ Kalau loading aktif → tampilkan blur + titik berjalan
+  if (loading) return <Loading />;
+
   return (
     <div className="flex min-h-screen bg-white text-[#111827] font-raleway relative">
       <style>{fontStyle}</style>
-      {loading && <Loading />}
 
       <Sidebar />
+
       <div className="flex flex-col flex-1">
         <Navbar />
 
         <main className="p-6 max-w-8xl mx-auto w-full">
-          {!loading && artikelList.length > 0 ? (
+          {artikelList.length > 0 ? (
             <div className="bg-[#f0f0f0] rounded-2xl shadow p-6">
               {/* Header Box */}
               <div className="flex justify-end items-center mb-6">
@@ -160,37 +163,40 @@ const Artikel = () => {
                         }`}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* Tombol Edit */}
-<button
-  onClick={(e) => {
-    e.stopPropagation(); // supaya ga trigger navigate card
-    navigate(`/admin/artikel/edit/${artikel.id}`);
-  }}
->
-  <img src={editIcon} alt="Edit" className="w-8 h-8" />
-</button>
+                        {/* Edit */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/admin/artikel/edit/${artikel.id}`);
+                          }}
+                        >
+                          <img src={editIcon} alt="Edit" className="w-8 h-8" />
+                        </button>
 
-{/* Tombol Hapus */}
-<button
-  onClick={(e) => {
-    e.stopPropagation(); // biar ga ikut klik card
-    setSelectedArtikel(artikel);
-    setShowModal(true);
-  }}
->
-  <img src={trashIcon} alt="Hapus" className="w-8 h-8" />
-</button>
-
+                        {/* Hapus */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedArtikel(artikel);
+                            setShowModal(true);
+                          }}
+                        >
+                          <img
+                            src={trashIcon}
+                            alt="Hapus"
+                            className="w-8 h-8"
+                          />
+                        </button>
                       </div>
 
-                      {/* Image */}
+                      {/* Gambar Artikel */}
                       <img
                         src={artikel.foto || Artikel1}
                         alt="Artikel"
                         className="w-full h-40 object-cover rounded-lg mb-3"
                       />
 
-                      {/* Content */}
+                      {/* Info */}
                       <p className="text-xs text-black mb-1">
                         Tanggal:{" "}
                         {artikel.updated_at
@@ -216,7 +222,7 @@ const Artikel = () => {
                         ></div>
                       </div>
 
-                      {/* Terkumpul & Target */}
+                      {/* Nominal */}
                       <div className="flex justify-between text-xs mb-4 text-black">
                         <span>
                           Terkumpul: Rp{terkumpul.toLocaleString("id-ID")}
@@ -235,10 +241,7 @@ const Artikel = () => {
                 })}
               </div>
             </div>
-          ) : null}
-
-          {/* Kalau kosong */}
-          {!loading && artikelList.length === 0 && (
+          ) : (
             <p className="text-center text-gray-500 mt-10">
               Belum ada artikel donasi urgensi.
             </p>
@@ -246,10 +249,10 @@ const Artikel = () => {
         </main>
       </div>
 
-      {/* Modal Konfirmasi */}
+      {/* Modal Konfirmasi Hapus */}
       {showModal && selectedArtikel && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-70">
-          <div className="bg-[#493953] text-white rounded-xl p-6 shadow-lg w-[420px] h-[#420px] text-center">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[70]">
+          <div className="bg-[#493953] text-white rounded-xl p-6 shadow-lg w-[420px] text-center">
             <p className="text-lg font-semibold mb-6">
               Yakin Ingin Hapus Artikel Ini?
             </p>

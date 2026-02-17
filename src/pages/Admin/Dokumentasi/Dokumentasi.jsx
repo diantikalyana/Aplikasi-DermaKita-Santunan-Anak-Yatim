@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
-// import axios from "axios"; // sementara dimatikan
+import Loading from "../../../components/Loading";
 
 const fontStyle = `
   @font-face {
@@ -84,6 +84,10 @@ const Dokumentasi = () => {
   const handleNavigate = (tujuan) => {
     navigate(tujuan);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-raleway">

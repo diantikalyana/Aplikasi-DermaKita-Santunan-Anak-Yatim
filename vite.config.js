@@ -3,11 +3,6 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  base: '/Aplikasi-DermaKita-Santunan-Anak-Yatim/',
   plugins: [react(), tailwindcss()],
-  server: {
-    port: 5173,
-    open: true,
-    // ⬇️ ini yang penting
-    historyApiFallback: true,
-  },
 })

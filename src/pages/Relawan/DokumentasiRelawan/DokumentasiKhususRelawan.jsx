@@ -121,6 +121,7 @@ const DokumentasiKhususRelawan = () => {
                     }
                     className="relative bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition duration-300 cursor-pointer"
                   >
+                    toggle button relavite bg-whte rounded-2xl shadow-md 
                     {/* Toggle Button */}
                     <button
                       onClick={(e) => {

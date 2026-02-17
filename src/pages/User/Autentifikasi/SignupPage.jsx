@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react"; // 👁️ ikon mata dari lucide-react
 import logo from "../../../assets/logo.png";
 import logotext from "../../../assets/LogoTextglas.png";
 
@@ -30,8 +31,10 @@ const fontStyle = `
   .font-poppins {
     font-family: 'Poppins', sans-serif;
   }
-  .font-righteous {
-    font-family: 'Righteous', cursive;
+
+  @keyframes bounceDelay {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
   }
 `;
 
@@ -41,22 +44,46 @@ function SignupPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSignup = (e) => {
     e.preventDefault();
+
     if (!nama || !username || !email || !password) {
-      alert("Harap isi semua kolom terlebih dahulu!");
+      setAlertMessage("Harap isi semua kolom terlebih dahulu!");
+      setIsSuccess(false);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
       return;
     }
     if (!email.includes("@")) {
-      alert("Format email tidak valid!");
+      setAlertMessage("Format email tidak valid!");
+      setIsSuccess(false);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
       return;
     }
     if (password.length < 6) {
-      alert("Password minimal 6 karakter!");
+      setAlertMessage("Password minimal 6 karakter!");
+      setIsSuccess(false);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
       return;
     }
-    navigate("/dashboard");
+
+    // simulasi signup sukses
+    setIsSuccess(true);
+    setAlertMessage("Selamat, akun kamu telah berhasil dibuat!");
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+      navigate("/user/autentifikasi"); // balik ke login
+    }, 2000);
   };
 
   const handleHome = () => {
@@ -64,11 +91,33 @@ function SignupPage() {
   };
 
   return (
-    <div className="h-screen font-raleway">
+    <div className="h-screen font-raleway relative">
       <style>{fontStyle}</style>
 
+      {/* ALERT POPUP */}
+      {showAlert && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div
+            className={`${
+              isSuccess
+                ? "bg-gradient-to-r from-[#a079da] to-[#5A4B6B]"
+                : "bg-gradient-to-r from-[#a079da] to-[#7e6699]"
+            } text-white rounded-2xl shadow-xl px-10 py-8 text-center w-[350px]`}
+          >
+            <h2 className="text-2xl font-semibold mb-3 animate-pulse">
+              {alertMessage}
+            </h2>
+            <div className="flex justify-center mt-4 space-x-1">
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-center h-full bg-gradient-to-b from-[#B091D1] to-[#5A4B6B] relative">
-        {/* Tombol kembali ke Home */} 
+        {/* Tombol kembali ke Home */}
         <button
           onClick={handleHome}
           className="absolute top-6 left-6 flex items-center gap-2 text-white text-sm font-regular hover:text-purple-200 transition"
@@ -78,14 +127,10 @@ function SignupPage() {
         </button>
 
         <div className="bg-white rounded-3xl shadow-lg p-4 w-[410px] text-center">
-          {/* Logo + LogoText sejajar */}
+          {/* Logo + LogoText */}
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="bg-[#D9D9D9] rounded-full flex items-center justify-center p-2">
-              <img
-                src={logo}
-                alt="Logo"
-                className="w-16 h-16 object-contain"
-              />
+              <img src={logo} alt="Logo" className="w-16 h-16 object-contain" />
             </div>
             <img
               src={logotext}
@@ -95,7 +140,7 @@ function SignupPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSignup} className="text-left">
+          <form onSubmit={handleSignup} className="text-left relative">
             <div className="mb-4">
               <label className="block text-sm font-regular mb-1 text-[#977DFF] font-poppins">
                 NAMA LENGKAP
@@ -132,16 +177,23 @@ function SignupPage() {
               />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-6 relative">
               <label className="block text-sm font-regular mb-1 text-[#977DFF] font-poppins">
                 PASSWORD
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm outline-purple-300 font-poppins"
+                className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm outline-purple-300 font-poppins pr-10"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-[35px] text-gray-500 hover:text-[#977DFF]"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
             <button

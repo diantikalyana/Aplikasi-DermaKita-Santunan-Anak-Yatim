@@ -436,14 +436,14 @@ className="flex justify-between items-center w-full text-left p-4
     {/* Tombol */}
     <div className="flex items-center justify-center space-x-4">
       <button
-        onClick={() => navigate("/login?redirect=dashboard")}
+        onClick={() => navigate("/user/autentifikasi")}
         className="px-6 py-2 rounded-full bg-gradient-to-b from-[#AF92D1] to-[#5B4B99]  text-white font-semibold shadow-md hover:bg-purple-400 transition"
       >
         Masuk
       </button>
       <span className="text-gray-600">atau</span>
       <button
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/user/autentifikasi/signup")}
         className="px-6 py-2 rounded-full bg-gradient-to-b from-[#AF92D1] to-[#5B4B99] text-white font-semibold shadow-md hover:bg-purple-400 transition"
       >
         Daftar
@@ -616,7 +616,7 @@ className="flex justify-between items-center w-full text-left p-4
       {/* Panah ke Login */}
       <div className="flex justify-center">
         <button
-          onClick={() => navigate("/login?redirect=donasi")}
+          onClick={() => navigate("/user/autentifikasi")}
           className="transition-transform duration-300 hover:scale-110"
         >
           <img

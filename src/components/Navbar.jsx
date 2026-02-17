@@ -64,7 +64,7 @@ const Navbar = () => {
   };
 
   const handleProfileClick = () => {
-    navigate("/admin/profile");
+    navigate("/kelola-akun");
   };
 
   return (

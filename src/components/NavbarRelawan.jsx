@@ -65,7 +65,7 @@ const NavbarRelawan = () => {
   };
 
   const handleProfileClick = () => {
-    navigate("/relawan/profilerelawan/profilerelawan");
+    navigate("/kelola-akun");
   };
 
   return (
@@ -109,10 +109,10 @@ const NavbarRelawan = () => {
             src="/icons/user-icon.svg"
             alt="ProfileAdmin"
             className="w-10 h-10 rounded-full object-cover"
-          />
+          /> 
           <div className="text-sm text-right leading-tight">
             <p className="font-semibold text-gray-800">Fulan</p>
-            <p className="text-sm text-gray-500">Superadmin</p>
+            <p className="text-sm text-gray-500">Relawan</p>
           </div>
         </div>
       </div>

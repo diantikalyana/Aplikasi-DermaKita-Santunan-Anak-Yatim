@@ -46,7 +46,7 @@ const DetailDokumentasiUmum = () => {
       deskripsi:
         "Bayu adalah seorang anak yatim yang saat ini sedang berjuang melawan sakit dan membutuhkan perawatan medis lanjutan.",
     },
-    {
+    {                      
       id: 3,
       foto: FotoTiga,
       tanggal: "2025-06-30",
@@ -61,7 +61,7 @@ const DetailDokumentasiUmum = () => {
 
   // Cari data sesuai id
   const detail = dummyData.find((item) => item.id === parseInt(id, 10));
-
+ 
   if (!detail) {
     return (
       <div className="flex min-h-screen">
